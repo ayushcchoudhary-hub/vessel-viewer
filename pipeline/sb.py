@@ -1,3 +1,4 @@
+import os
 """Read-only access to the recorder database through Supabase's REST API."""
 import json, os, ssl, urllib.request, urllib.parse
 URL = os.environ['SUPABASE_URL'].rstrip('/') + '/rest/v1/'

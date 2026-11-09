@@ -38,12 +38,14 @@ Real data:
 - Port-call history and flag (Global Fishing Watch). This runs about 3 days behind.
 - Hong Kong arrivals, departures and ships in port (Marine Department open data).
 - Coastlines (Natural Earth).
+- Hill outlines on the horizon (elevation from Terrain Tiles on AWS Open Data, SRTM-based). Drawn 3× taller than life. Buildings are not drawn.
 
 Drawn or inferred:
 - **Ship type for cargo ships** is a best guess. AIS only says "cargo", so container ships, bulk carriers and car carriers are told apart by name.
 - **Routes between ports** follow standard sea lanes. They are not the ship's actual track.
 - **Silhouettes** are generic per type, scaled to each ship's length.
-- **The horizon** compresses distance so near and far ships both fit, and uses generic hill heights.
+- **The horizon** squeezes distance so near and far ships both fit. Bearings and the order of ships are true.
+- **Which ships you can see** is computed: Earth's curve from a 3 m eye height, and land in the way.
 
 ## Run it
 
@@ -53,6 +55,7 @@ cd pipeline
 python extract.py      # last hour of ships from the database
 python build_real.py   # join Global Fishing Watch history and routes
 python board.py        # Hong Kong board
+python terrain.py      # skyline from elevation tiles (once per shore)
 python build4.py && python build_page.py
 ```
 
@@ -64,6 +67,7 @@ Deploy the recorder: apply `supabase/migrations/0001_schema.sql`, deploy `supaba
 - Port history: Powered by [Global Fishing Watch](https://globalfishingwatch.org). Non-commercial use (CC BY-NC 4.0).
 - Hong Kong board: [Marine Department open data](https://data.gov.hk)
 - Coastlines: [Natural Earth](https://www.naturalearthdata.com)
+- Elevation: [Terrain Tiles on AWS Open Data](https://registry.opendata.aws/terrain-tiles/)
 - Sea routes: [searoute](https://github.com/genthalili/searoute-py)
 
 Built by Ayush Choudhary with Claude Code.

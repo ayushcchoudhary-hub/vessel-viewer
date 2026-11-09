@@ -1,3 +1,4 @@
+import os
 import json, os, ssl, urllib.request, urllib.parse, time, hashlib
 env={'GFW_TOKEN': os.environ['GFW_TOKEN']}
 ctx=ssl.create_default_context(cafile=os.environ.get('SSL_CERT_FILE'))

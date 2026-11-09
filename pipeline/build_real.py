@@ -89,7 +89,7 @@ def merge_calls(pc, cur):
     # drop a last call that is just "here" (the current port) if ongoing near current position
     return out
 def fmt(d): return f"{d.day} {d.strftime('%b')}"
-MAXN={'sg':45,'hk':35,'ldn':30}
+MAXN={'sg':60,'hk':45,'ldn':30}
 ships_out={}; stats={}
 for cid,c in D['cities'].items():
     rows=[r for r in L['cities'][cid] if r['d']<14 and (r['len'] or 0)>=40 and r['name']]
@@ -104,6 +104,7 @@ for cid,c in D['cities'].items():
             try: calls=merge_calls(port_calls(idn['ids']),[r['lon'],r['lat']])
             except Exception as e: print('pc err',r['name'],e)
         typ=classify(r['type'],r['name'],idn and idn.get('shiptype'),r['len'])
+        guess = typ in ('container','bulk','car') and not (r['type'] and 80<=r['type']<=89)
         cur=[round(r['lon'],4),round(r['lat'],4)]
         # recent calls: last 5, at most 60 days
         calls=[x for x in calls if (NOW-dt.datetime.fromisoformat(x['end'].replace('Z','+00:00'))).days<=75][-5:]
@@ -132,7 +133,7 @@ for cid,c in D['cities'].items():
         out.append(dict(id=f"{cid}{r['mmsi']}",mmsi=r['mmsi'],imo=(idn or {}).get('imo') or r.get('imo'),name=r['name'],type=typ,ais_type=r['type'],
             flag=FLAG.get((idn or {}).get('flag'),(idn or {}).get('flag') or ''),built=None,len=r['len'],beam=r['beam'],status=status,kn=round(r['sog'] or 0,1),
             a=tr[0] if moving else cur,b=cur if moving else None,track=tr if moving else None,cog=r['cog'],hdg=r['hdg'],
-            calls=callsj,here=here,next=nxt,dest_raw=r['dest'],legs=legs,real=True,draught=r['draught']))
+            calls=callsj,here=here,typeGuess=guess,next=nxt,dest_raw=r['dest'],legs=legs,real=True,draught=r['draught']))
     ships_out[cid]=out
     stats[cid]=dict(n=len(out),with_calls=sum(1 for s in out if s['calls']),with_next=sum(1 for s in out if s['next']),moving=sum(1 for s in out if s['b']))
     print(cid,stats[cid])

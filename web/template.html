@@ -55,8 +55,22 @@ header.hero{padding:32px 0 18px;display:flex;flex-direction:column;gap:14px}
 .chip{flex:none;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;padding:0 12px;min-height:36px;border-radius:999px;background:#F1F4F7;color:var(--ink);border:1px solid transparent;cursor:pointer;white-space:nowrap}
 .chip i{width:8px;height:3px;border-radius:2px;display:inline-block}
 .chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:#FFF3EE}
+.typekey{display:flex;flex-wrap:wrap;gap:4px 18px;padding:8px 16px 12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);align-items:center}
+.typekey span{display:inline-flex;align-items:center;gap:6px}
+.typekey img{height:16px}
+.realtab{margin-top:24px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card)}
+.rr{display:grid;grid-template-columns:minmax(0,1.1fr) 120px minmax(0,2fr);gap:14px;padding:12px 18px;border-top:1px solid #EEF1F4;font-size:14px;align-items:baseline}
+.rr:first-child{border-top:0}
+.rh{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;background:#F6F8FA}
+.st{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.st.d{background:var(--ink);color:#fff}.st.g{border:1px solid var(--ink);color:var(--ink)}.st.r{border:1px dashed var(--muted);color:var(--muted)}
+@media (max-width:640px){.rr{grid-template-columns:1fr auto}.rr span:nth-child(3){grid-column:1/-1;color:var(--muted)}.rh span:nth-child(3){display:none}}
 .below{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;align-items:stretch;margin:20px 0 8px}
 @media (max-width:940px){.below{grid-template-columns:1fr}}
+.czoom{display:flex;gap:4px;background:#EEF2F6;border-radius:999px;padding:3px}
+.czoom button{border:0;background:transparent;border-radius:999px;padding:0 12px;min-height:34px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.czoom button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(13,27,42,.12)}
+.chartnote{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.9);border-radius:6px;padding:2px 8px;pointer-events:none}
 .chart{position:relative;aspect-ratio:16/10;background:#EAF1F7;cursor:crosshair}
 @media (max-width:640px){.chart{aspect-ratio:1/1}}
 .ptitle{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);font-weight:600;font-size:15px}
@@ -161,17 +175,18 @@ body.film header.hero{padding-top:18px}
 
   <div class="panel" id="horizonPanel">
     <div class="nowbar">
-      <div class="t"><span id="nowTitle">From East Coast Park</span> <span class="badge" id="liveBadge"><i></i>REAL SHIPS · AIS</span></div>
+      <div class="t"><span id="nowTitle">From East Coast Park</span> <a class="badge" id="liveBadge" href="#real" style="text-decoration:none"><i></i>REAL SHIPS · AIS</a></div>
       <div class="stats" id="nowStats"></div>
     </div>
     <div class="horizon" id="horizon" tabindex="0" aria-label="Horizon view. Use left and right arrow keys to look around."><canvas id="hz" role="img" aria-label="Horizon view from the shore with ships labelled"></canvas><div class="vign"></div><span class="hint" id="hzhint">Ships drawn to scale with each other · drag to look around · tap a ship</span></div>
     <div class="inview" id="inview" role="group" aria-label="Ships in view"></div>
+    <div class="typekey" id="typekey" aria-label="Ship types"></div>
   </div>
 
   <div class="below">
     <div class="panel">
-      <div class="ptitle">From above <small id="aboveNote"></small></div>
-      <div class="chart"><canvas id="cv" role="img" aria-label="Chart of ships near the shore, seen from above"></canvas></div>
+      <div class="ptitle"><span>From above</span><span class="czoom" role="group" aria-label="Map zoom"><button type="button" data-w="0" aria-pressed="true">Close up</button><button type="button" data-w="1" aria-pressed="false">Whole area</button></span></div>
+      <div class="chart"><canvas id="cv" role="img" aria-label="Chart of ships near the shore, seen from above"></canvas><span class="chartnote" id="chartnote"></span></div>
     </div>
     <aside class="card" id="shipcard" aria-live="polite"></aside>
   </div>
@@ -210,6 +225,31 @@ body.film header.hero{padding-top:18px}
   </div>
 </section>
 
+<section class="block" id="real">
+  <div class="wrap">
+    <div class="eyebrow">What is real</div>
+    <h2>Data, guesses, and drawing.</h2>
+    <p class="lede" style="margin-top:12px">Every ship on this page is real. Some parts are inferred or drawn so the page reads well. This is the full list.</p>
+    <div class="realtab" role="table">
+      <div class="rr rh" role="row"><span role="columnheader">On the page</span><span role="columnheader">Status</span><span role="columnheader">Source and note</span></div>
+      <div class="rr" role="row"><span>Ship names, positions, speed, heading</span><span><b class="st d">DATA</b></span><span>Live AIS broadcasts via aisstream.io. Snapshot taken <span class="capd"></span>.</span></div>
+      <div class="rr" role="row"><span>Ship length</span><span><b class="st d">DATA</b></span><span>The ship's own AIS broadcast. Some ships send wrong sizes.</span></div>
+      <div class="rr" role="row"><span>Ship type: tanker, gas carrier, cruise, cargo</span><span><b class="st d">DATA</b></span><span>The AIS type code the ship broadcasts.</span></div>
+      <div class="rr" role="row"><span>Ship type: container, bulk carrier, car carrier</span><span><b class="st g">GUESS</b></span><span>AIS only says "cargo". I guess from the name (MSC, COSCO and so on) and size. Shown as "(likely)".</span></div>
+      <div class="rr" role="row"><span>Flag and last port calls</span><span><b class="st d">DATA</b></span><span>Global Fishing Watch port visits. About 3 days behind. Anchorage and bunker stops count as visits.</span></div>
+      <div class="rr" role="row"><span>Where it's heading, and when</span><span><b class="st d">DATA</b></span><span>Typed in by the crew, so it can be wrong or out of date. Matched to UN/LOCODE ports.</span></div>
+      <div class="rr" role="row"><span>Routes between ports</span><span><b class="st g">INFERRED</b></span><span>Standard sea lanes (searoute), not the ship's real track.</span></div>
+      <div class="rr" role="row"><span>Moving ships</span><span><b class="st d">DATA</b></span><span>Their real positions from the last hour, replayed 60× faster.</span></div>
+      <div class="rr" role="row"><span>Which ships you can see</span><span><b class="st d">COMPUTED</b></span><span>Earth's curve from a 3 m eye height, and land in the way.</span></div>
+      <div class="rr" role="row"><span>Hills on the horizon</span><span><b class="st d">DATA</b></span><span>Real elevation (SRTM terrain tiles, AWS Open Data). Drawn 3× taller than life. Buildings are not drawn.</span></div>
+      <div class="rr" role="row"><span>Coastlines and map</span><span><b class="st d">DATA</b></span><span>Natural Earth 1:10m.</span></div>
+      <div class="rr" role="row"><span>Distance on the horizon</span><span><b class="st r">DRAWN</b></span><span>Bearings and the order of ships are true. Distance is squeezed so near and far ships both fit.</span></div>
+      <div class="rr" role="row"><span>Ship drawings</span><span><b class="st r">DRAWN</b></span><span>A generic shape for each type, scaled to the ship's real length. Not what that ship looks like.</span></div>
+      <div class="rr" role="row"><span>Hong Kong board and arrival lines</span><span><b class="st d">DATA</b></span><span>Hong Kong Marine Department open data, captured <span id="capBoard"></span>. Ships due in the next few days. Lines are straight, not routes. Ports I could not place are left off.</span></div>
+    </div>
+  </div>
+</section>
+
 <section class="block" id="how">
   <div class="wrap">
     <div class="eyebrow">How it is built</div>
@@ -242,6 +282,7 @@ const WORLD = /*WORLD*/;
 const WORLD110 = /*WORLD110*/;
 const LAND = topojson.feature(WORLD, WORLD.objects.land);
 const LAND110 = topojson.feature(WORLD110, WORLD110.objects.land);
+const typeName = sh => TYPES[sh.type].label + (sh.typeGuess ? ' (likely)' : '');
 const TYPES = {
   container:{label:'Container', code:'CTR', c:'#2F6FDB', beam:.14, H:.15},
   tanker:{label:'Tanker', code:'TNK', c:'#B4233F', beam:.18, H:.13},
@@ -255,7 +296,7 @@ const TYPES = {
 const HULL='#1B2B3C', SUP='#E9EEF3', ACC='#EF4E14';
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const rad = Math.PI/180;
-const state = { city:'sg', sel:null, hover:null, h:3, face:160, zoom:1 };
+const state = { city:'sg', sel:null, hover:null, h:3, face:160, zoom:1, wide:false, hoverAll:null };
 let FOV = 60;
 const zoomBase = () => (innerWidth < 700 ? 36 : 60);
 const T0 = performance.now();
@@ -348,15 +389,18 @@ function setZoom(z){
   tween(f0,f1,600,x=>{ FOV=x; });
 }
 document.querySelectorAll('.zb').forEach(b=>b.addEventListener('click',()=>setZoom(+b.dataset.z)));
+function setWide(w){ state.wide=w; document.querySelectorAll('.czoom button').forEach(o=>o.setAttribute('aria-pressed',String(+o.dataset.w===+w))); fit(); noteChart(); }
+function noteChart(){ const c=DATA.cities[state.city]; document.getElementById('chartnote').textContent = state.wide ? `${c.ships.length+c.allShips.length} ships in the area right now · bold = featured, with history` : `${c.ships.length} featured ships · wedge = where you are looking`; }
+document.querySelectorAll('.czoom button').forEach(b=>b.addEventListener('click',()=>setWide(b.dataset.w==='1')));
 
 /* ---------- canvases ---------- */
 function setupCanvas(cv){ const r=cv.getBoundingClientRect(), dpr=Math.min(devicePixelRatio||1,2); cv.width=Math.max(1,r.width*dpr); cv.height=Math.max(1,r.height*dpr); const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); return {c,W:r.width,H:r.height,dpr}; }
 const hz=document.getElementById('hz'), cv=document.getElementById('cv');
-let HZ, CV, proj, CHARTBASE=null;
+let HZ, CV, proj, CHARTBASE=null; const ALLQ=[];
 function fit(){
   HZ=setupCanvas(hz); CV=setupCanvas(cv);
-  const c=DATA.cities[state.city], [x0,y0,x1,y1]=c.bbox, k=Math.cos(((y0+y1)/2)*rad);
-  const s=Math.max(CV.W/((x1-x0)*k), CV.H/(y1-y0)), cx=(x0+x1)/2, cy=(y0+y1)/2;
+  const c=DATA.cities[state.city], [x0,y0,x1,y1]=state.wide?c.bboxWide:c.bbox, k=Math.cos(((y0+y1)/2)*rad);
+  const s=state.wide?Math.min(CV.W/((x1-x0)*k), CV.H/(y1-y0)):Math.max(CV.W/((x1-x0)*k), CV.H/(y1-y0)), cx=(x0+x1)/2, cy=(y0+y1)/2;
   proj={s,k,f:(lon,lat)=>[CV.W/2+(lon-cx)*k*s, CV.H/2-(lat-cy)*s]};
   // cache the land layer of the chart
   CHARTBASE=document.createElement('canvas'); CHARTBASE.width=CV.W*CV.dpr; CHARTBASE.height=CV.H*CV.dpr;
@@ -391,7 +435,7 @@ function frame(){
   const chips=inView.sort((a,b)=>a.d-b.d).slice(0,12);
   const key=chips.map(v=>v.sh.id).join()+'|'+state.sel;
   if(key!==lastChips){ lastChips=key; const el=document.getElementById('inview');
-    el.innerHTML=chips.map(v=>`<button type="button" class="chip" data-id="${v.sh.id}" aria-pressed="${v.sh.id===state.sel}"><i style="background:${TYPES[v.sh.type].c}"></i>${v.sh.name}</button>`).join('') || '<span class="note" style="padding:8px 4px">No big ships this way. Drag to look around.</span>';
+    el.innerHTML=chips.map(v=>`<button type="button" class="chip" data-id="${v.sh.id}" aria-pressed="${v.sh.id===state.sel}"><i style="background:${TYPES[v.sh.type].c}"></i>${v.sh.name}<span style="color:#556576;font-family:var(--body)">${TYPES[v.sh.type].label.split(' ')[0]}</span></button>`).join('') || '<span class="note" style="padding:8px 4px">No big ships this way. Drag to look around.</span>';
     el.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>select(b.dataset.id,true))); }
 }
 const HL=[];
@@ -412,17 +456,17 @@ function drawHorizon(c){
   x.fillStyle=sea; x.fillRect(0,yH,W,H-yH);
   x.font='10px "IBM Plex Mono", monospace'; x.textAlign='right';
   for(const nm of [1,2,5,10]){ const y=yOf(nm*1852); if(y<yH+8||y>H-4) continue; x.strokeStyle='rgba(255,255,255,.55)'; x.setLineDash([2,6]); x.beginPath(); x.moveTo(0,y); x.lineTo(W,y); x.stroke(); x.setLineDash([]); x.fillStyle='rgba(13,27,42,.4)'; x.fillText(nm+' nm',W-8,y-4); }
-  // land as smooth layered ridges: far first, then near
-  const relief={sg:70,hk:320,ldn:30}[state.city];
-  const hill=b=>.55+.25*Math.sin(b*rad*7.3)+.15*Math.sin(b*rad*17.9+1.3)+.05*Math.sin(b*rad*41+.7);
-  const step=Math.max(.15, FOV/300);
+  // land: real skyline from elevation data (angle above horizontal), hills drawn 3x taller than life
+  const SKY=c.skyline, VEX=3, step=Math.max(.15, FOV/300);
+  const skyAt=b=>{ const f=((b%360)+360)%360*2, i0=Math.floor(f)%720, i1=(i0+1)%720, u=f-Math.floor(f), a=SKY[i0], q=SKY[i1]; if(!a&&!q) return null; if(!a) return q; if(!q) return a; return [a[0]+(q[0]-a[0])*u, a[1]+(q[1]-a[1])*u]; };
   const samples=[];
   for(let i=-FOV/2-2;i<=FOV/2+2;i+=step){
-    const b=(state.face+i+360)%360, L=c.landProfile[Math.round(b*2)%720];
-    if(L==null){ samples.push(null); continue; }
-    const dm=Math.max(L,.15)*1852, far=L>4, base=far?yH+2:Math.min(H+2, yOf(dm)), raw=sizeAt(relief,far?yOf(dm):base)*.9, cap=yH*.3;
-    const rise=Math.max(4, cap*Math.tanh(raw/cap)*(.35+.65*hill(b)));
-    samples.push({X:xOf(b), base, top:Math.min(yH,base)-rise, far});
+    const b=(state.face+i+360)%360, L=c.landProfile[Math.round(b*2)%720], s=skyAt(b);
+    if(L==null && !s){ samples.push(null); continue; }
+    const near = L!=null && L<=4, base = near ? Math.min(H+2, yOf(Math.max(L,.15)*1852)) : yH+2;
+    const ang = s ? s[0] : .03, dist = s ? s[1] : (L||10);
+    const top = Math.max(yH*.3, yH - Math.max(1.5, ang*ppd*VEX));
+    samples.push({X:xOf(b), base, top:Math.min(top, base-2), far: dist>4 && !near});
   }
   for(const pass of [true,false]){
     let run=[];
@@ -469,7 +513,7 @@ function drawHorizon(c){
   const placed=[];
   x.textAlign='left';
   for(const o of order){
-    const name=o.sh.name, sub=`${TYPES[o.sh.type].label} · ${o.d.toFixed(1)} nm`;
+    const name=o.sh.name, sub=`${typeName(o.sh)} · ${o.sh.len||'?'} m · ${o.d.toFixed(1)} nm`;
     x.font='600 12px "IBM Plex Mono", monospace'; const w1=x.measureText(name).width; x.font='11px "IBM Plex Sans", sans-serif'; const w=Math.max(w1,x.measureText(sub).width)+16;
     const lx=Math.min(W-w-6, Math.max(6, o.X-w/2)); let r=-1;
     for(let i=0;i<nRows;i++){ if(rows[i].every(s=>lx+w<s[0]-6||lx>s[1]+6)){ rows[i].push([lx,lx+w]); r=i; break; } }
@@ -493,7 +537,12 @@ function drawChart(c){
   x.fillStyle='rgba(239,78,20,.08)'; x.beginPath(); x.moveTo(you[0],you[1]);
   x.arc(you[0],you[1],rpx,(state.face-FOV/2-90)*rad,(state.face+FOV/2-90)*rad); x.closePath(); x.fill();
   x.setLineDash([4,6]); x.strokeStyle='rgba(13,27,42,.35)'; x.beginPath(); x.arc(you[0],you[1],rpx,0,6.283); x.stroke(); x.setLineDash([]);
-  const scale=Math.min(.09, 34/366*(W/900));
+  const scale=state.wide?Math.min(.05,18/366*(W/900)):Math.min(.09, 34/366*(W/900));
+  if(state.wide){ ALLQ.length=0; for(const a of c.allShips){ const q=proj.f(a[0],a[1]); if(q[0]<-5||q[1]<-5||q[0]>W+5||q[1]>H+5) continue; ALLQ.push([q,a]);
+      const t=a[2]; const typ=(t>=80&&t<=89)?'tanker':(t>=60&&t<=69)?'passenger':(t>=70&&t<=79)?'cargo':'other';
+      drawTop(x,{type:typ,len:Math.max(30,a[3]||40)},q,a[4],scale,a[3]>=80?.8:.45,false); }
+    if(state.hoverAll){ const [q,a]=state.hoverAll; x.font='500 12px "IBM Plex Mono", monospace'; const lb=`${a[5]||'unnamed'} · ${a[3]||'?'} m`; const tw=x.measureText(lb).width; let lx=Math.min(q[0]+12,W-tw-12); x.fillStyle='rgba(255,255,255,.95)'; x.fillRect(lx-5,q[1]-26,tw+10,20); x.fillStyle='#0D1B2A'; x.fillText(lb,lx,q[1]-12); }
+  }
   for(const v of VIEW){
     const q=proj.f(v.p[0],v.p[1]); v.q=q;
     const inView=v.visible && Math.abs(angDiff(v.b,state.face))<=FOV/2;
@@ -526,10 +575,12 @@ hzWrap.addEventListener('pointermove',e=>{
 hzWrap.addEventListener('pointerup',e=>{ if(drag && !drag.moved){ const [mx,my]=local(e,hz); const id=hitHorizon(mx,my); if(id) select(id,false); } drag=null; });
 ['pointerleave','pointercancel'].forEach(t=>hzWrap.addEventListener(t,()=>{ state.hover=null; if(t==='pointercancel') drag=null; }));
 hzWrap.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'||e.key==='ArrowRight'){ e.preventDefault(); state.face=(state.face+(e.key==='ArrowLeft'?-5:5)+360)%360; } });
-cv.addEventListener('pointermove',e=>{ const [mx,my]=local(e,cv); state.hover=hitChart(mx,my); cv.style.cursor=state.hover?'pointer':'crosshair'; });
+cv.addEventListener('pointermove',e=>{ const [mx,my]=local(e,cv); state.hover=hitChart(mx,my); state.hoverAll=null; if(!state.hover&&state.wide){ let bd=10; for(const it of ALLQ){ const d=Math.hypot(it[0][0]-mx,it[0][1]-my); if(d<bd){bd=d;state.hoverAll=it;} } } cv.style.cursor=state.hover?'pointer':'crosshair'; });
 cv.addEventListener('pointerleave',()=>{ state.hover=null; });
 cv.addEventListener('click',e=>{ const [mx,my]=local(e,cv); const id=hitChart(mx,my); if(id) select(id,true); });
 
+function typeKey(){ const c=DATA.cities[state.city]; const used=[...new Set(c.ships.map(s=>s.type))];
+  document.getElementById('typekey').innerHTML=used.map(t=>{ const k=document.createElement('canvas'); k.width=120; k.height=40; const g=k.getContext('2d'); drawSide(g,t,60,36,104,1,shipColors(0,false),TYPES[t].c,t==='container'?300:200); return `<span><img src="${k.toDataURL()}" alt="">${TYPES[t].label}</span>`; }).join('') + '<span style="margin-left:auto"><a href="#real" style="color:var(--muted)">What is real data here? ↓</a></span>'; }
 /* ---------- ship card ---------- */
 const FLAGS={};
 function silhouette(sh){ const k=document.createElement('canvas'); k.width=720; k.height=140; const c=k.getContext('2d'); const L=Math.min(680,140+(sh.len||60)*1.45); drawSide(c,sh.type,360,122,L,1,shipColors(0,false),TYPES[sh.type].c,sh.len); return k.toDataURL(); }
@@ -542,7 +593,7 @@ function card(sh){
   document.getElementById('shipcard').innerHTML=`
     <div style="display:flex;flex-direction:column;gap:8px">
       <div class="vname shipname">${sh.name}</div>
-      <div class="meta"><span class="pill"><i style="background:${t.c}"></i>${t.label}</span>${sh.len?`<span class="pill">${sh.len} m</span>`:''}${sh.flag?`<span class="pill">${sh.flag} flag</span>`:''}<span class="pill">${status}</span></div>
+      <div class="meta"><span class="pill"><i style="background:${t.c}"></i>${typeName(sh)}</span>${sh.len?`<span class="pill">${sh.len} m</span>`:''}${sh.flag?`<span class="pill">${sh.flag} flag</span>`:''}<span class="pill">${status}</span></div>
     </div>
     <img class="silho" src="${silhouette(sh)}" alt="${t.label} silhouette, drawn to its length">
     <div class="fromto">
@@ -739,7 +790,7 @@ new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting) && !boardShown){ 
   document.getElementById('pnum3').textContent=`${ships.filter(s=>s.next).length}/${ships.length} destinations matched`;
   document.getElementById('pnum4').textContent=`${ships.reduce((a,s)=>a+s.calls.length,0)} port calls joined`;
   document.getElementById('pnum5').textContent=`snapshot ${capStr}`;
-  document.getElementById('credits').innerHTML=`Ships are real, from a snapshot of the live AIS feed taken ${capStr}. Moving ships replay their last hour. Ship positions: aisstream.io. Port history: Powered by Global Fishing Watch (non-commercial use). Hong Kong board: Marine Department open data. Coastlines: Natural Earth. Built by Ayush Choudhary with Claude Code. Code: github.com/ayushcchoudhary-hub/vessel-viewer.`;
+  document.getElementById('credits').innerHTML=`Ships are real, from a snapshot of the live AIS feed taken ${capStr}. Moving ships replay their last hour. Ship positions: aisstream.io. Port history: Powered by Global Fishing Watch (non-commercial use). Hong Kong board: Marine Department open data. Coastlines: Natural Earth. Elevation: Terrain Tiles on AWS Open Data (SRTM and others). Built by Ayush Choudhary with Claude Code. Code: github.com/ayushcchoudhary-hub/vessel-viewer.`;
   const k=document.getElementById('fleet'), K=setupCanvas(k); const c=K.c; let xx=10; const pick=ships.filter(s=>s.len>=120).sort((a,b)=>b.len-a.len);
   const types=['container','tanker','bulk','lng','car','passenger']; const order=types.map(t=>pick.find(s=>s.type===t)).filter(Boolean).concat(pick).slice(0,14);
   for(const s of order){ const L=s.len*.32*Math.min(1,K.W/1100); if(xx+L>K.W-10) break; drawSide(c,s.type,xx+L/2,K.H-6,L,1,shipColors(0,false),TYPES[s.type].c,s.len); xx+=L+16; }
@@ -782,14 +833,14 @@ function setCity(id, selId){
   state.city=id; state.hover=null; state.face=DATA.cities[id].face;
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===id)));
   document.getElementById('nowTitle').textContent='From '+DATA.cities[id].spot;
-  document.getElementById('aboveNote').textContent='wedge = where you are looking';
-  fit(); frame();
+  fit(); noteChart(); frame(); typeKey();
   if(selId){ select(selId,true); return; }
   const near=[...VIEW].filter(v=>v.visible && Math.abs(angDiff(v.b,state.face))<FOV/2 && v.sh.calls.length).sort((a,b)=>(b.sh.len||0)/(1+b.d)-(a.sh.len||0)/(1+a.d))[0] || VIEW[0];
   if(near) select(near.sh.id,false);
 }
 window.addEventListener('resize',()=>{ FOV=zoomBase()/state.zoom; fit(); glFit(); drawGlobe(); frame(); });
 document.getElementById('liveBadge').innerHTML=`<i></i>REAL SHIPS · ${capStr}`;
+document.querySelectorAll('.capd').forEach(e=>e.textContent=capStr); document.getElementById('capBoard').textContent=DATA.board.snapshot;
 FOV=zoomBase(); glFit(); board(false); boardShown=false;
 if(location.hash==='#film') document.body.classList.add('film');
 setCity('sg');
