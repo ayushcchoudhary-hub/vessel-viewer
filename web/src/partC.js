@@ -57,7 +57,7 @@ async function tour(){
     await step('Where has it <em>been?</em>',4200,()=>journey(cand.sh,true));
     await step('Ride along',8000);
     await step(`Zoom out: ${Math.max(1,Math.round((prepTL('sg').k1-prepTL('sg').k0)/6))} hours of <em>traffic</em>`,7000,()=>{ TLS.seen=true; document.getElementById('zoom').scrollIntoView({behavior:'smooth'}); setTimeout(()=>{ if(live()) tlStart(); },600); });
-    await step('Public data, <em>all the way down</em>',3800,()=>document.getElementById('how').scrollIntoView({behavior:'smooth'}));
+    await step('From ship radio, <em>AIS</em>, and Global Fishing Watch',4200,()=>document.getElementById('how').scrollIntoView({behavior:'smooth'}));
     await step("What's that ship? <em>Now you know.</em>",2200);
   } catch(e){} finally { if(live()) stopTour(); }
 }
@@ -74,7 +74,7 @@ function select(id,turn){
 const CITY_ORDER=Object.keys(DATA.cities);
 function setCity(id, selId){
   state.city=id; state.hover=null; state.face=DATA.cities[id].face; const c=DATA.cities[id];
-  document.getElementById('cityName').textContent=c.name;
+  document.getElementById('cityName').textContent=c.name; document.querySelectorAll('#shores button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===id));
   document.getElementById('nowTitle').textContent=`From ${c.spot}, ${c.name}`;
   document.getElementById('liveBadge').innerHTML=`<i></i>SNAPSHOT · ${CAPTURED.toLocaleString('en-GB',{timeZone:TZ[id],day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})} local`;
   fit(); frame(); typeKey(); dest(); tlBars();
@@ -84,6 +84,8 @@ function setCity(id, selId){
   pickSeen=false;
 }
 function stepCity(d){ const i=CITY_ORDER.indexOf(state.city); setCity(CITY_ORDER[(i+d+CITY_ORDER.length)%CITY_ORDER.length]); }
+document.getElementById('shores').innerHTML=CITY_ORDER.filter(k=>DATA.cities[k]).map(k=>`<button type="button" data-c="${k}" aria-pressed="false">${DATA.cities[k].name}</button>`).join('');
+document.getElementById('shores').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b && b.dataset.c!==state.city) setCity(b.dataset.c); });
 document.getElementById('prevCity').addEventListener('click',()=>stepCity(-1));
 document.getElementById('nextCity').addEventListener('click',()=>stepCity(1));
 // section highlight in the top bar

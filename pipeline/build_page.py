@@ -17,4 +17,5 @@ html = (html.replace('/*DATA*/', json.dumps(D, separators=(',', ':')))
             .replace('/*WORLD*/', open(W + 'world-atlas/land-50m.json').read())
             .replace('/*WORLD110*/', open(W + 'world-atlas/land-110m.json').read()))
 open('../web/vessel-viewer.html', 'w').write(html)
+open('../site/index.html', 'w').write(html)  # the deployed page
 print(len(html), 'bytes')

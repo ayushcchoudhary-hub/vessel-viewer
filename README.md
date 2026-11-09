@@ -75,3 +75,7 @@ Deploy the recorder: apply `supabase/migrations/0001_schema.sql`, deploy `supaba
 - Sea routes: [searoute](https://github.com/genthalili/searoute-py)
 
 Built by Ayush Choudhary with Claude Code.
+
+## Deploy
+
+`site/index.html` is the built page with a data snapshot inside it. Host the `site/` folder as a static site (on Vercel, set Root Directory to `site`). To refresh the data, run the pipeline, then `pipeline/build_page.py`, and commit `site/index.html`.

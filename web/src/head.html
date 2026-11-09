@@ -160,7 +160,7 @@ details.real summary span{font-family:var(--mono);font-size:12px;font-weight:400
   -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/16px 51% repeat-x,linear-gradient(#000 0 0) top/100% 51% no-repeat;
           mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/16px 51% repeat-x,linear-gradient(#000 0 0) top/100% 51% no-repeat}
 .receipt h3{font-family:var(--display);font-size:30px;letter-spacing:-.03em;margin:0 0 6px;color:var(--ink)}
-.receipt .row{display:flex;justify-content:space-between;border-bottom:1px dashed #CFC8BB;padding:6px 0;text-align:left}
+.receipt .row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px dashed #CFC8BB;padding:6px 0;text-align:left}
 .receipt .ty{letter-spacing:.2em;font-weight:600;margin-top:18px;color:var(--ink)}
 .receipt button{margin-top:16px}
 .receipt .credits{font-size:11px;color:var(--muted);margin-top:14px;line-height:1.5}
@@ -172,6 +172,12 @@ body.film .hint,body.film .meta{display:none}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 
 /* r2 */
+.receipt .row span:last-child{text-align:right}
+.shores{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.shores button{font:600 14px var(--body);border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:0 16px;min-height:40px;cursor:pointer}
+.shores button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.shores button:hover{background:var(--soft)}.shores button[aria-pressed="true"]:hover{background:var(--ink)}
+@media (max-width:640px){.shores{gap:6px}.shores button{font-size:13px;padding:0 12px}}
 .badge i{display:none}
 .caption.tour{top:72px;bottom:auto}
 .hero .who{font-family:var(--body);font-size:13.5px;line-height:1.45;max-width:46ch}
@@ -263,6 +269,7 @@ details.real summary{font-size:18px}
 
   <section class="act" id="look">
     <div class="acthead"><span class="n">01</span><h2>Look out</h2><p id="lookSub">The real ships off the shore, at their true bearing and size. Drag to look around. Tap a ship.</p></div>
+    <div class="shores" id="shores" role="group" aria-label="Choose a shore"></div>
     <div class="frame" id="horizonPanel">
       <div class="hzhead"><div class="where"><span id="nowTitle">From East Coast Park</span><a class="badge" id="liveBadge" href="#real"><i></i>SNAPSHOT</a></div>
         <div class="seg" role="group" aria-label="Zoom"><button class="zb" type="button" data-z="1" aria-pressed="true">Eye</button><button class="zb" type="button" data-z="7" aria-pressed="false">7×</button></div></div>
