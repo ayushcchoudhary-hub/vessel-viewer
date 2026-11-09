@@ -1,0 +1,8 @@
+.env
+cache/
+export/
+node_modules/
+__pycache__/
+*.pyc
+web/vessel-viewer.html
+web/local.html
