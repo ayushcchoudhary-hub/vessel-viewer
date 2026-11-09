@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#FBFCFD}
+#stage{position:relative;width:1600px;height:1100px;overflow:hidden;background:#FBFCFD;font-family:'Bricolage Grotesque',sans-serif;color:#0D1B2A}
+#cap{position:absolute;left:80px;right:80px;top:48px;height:150px;font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+#cap span{display:inline-block;opacity:0;transform:translateY(14px);margin-right:.24em}
+#cap .a{color:#EF4E14}
+#tag{position:absolute;right:80px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:20px;color:#556576}
+#view{position:absolute;left:60px;top:220px;width:1480px;height:832px;overflow:hidden;border-radius:28px;border:1px solid #DCE3EA;background:#fff}
+#view img{position:absolute;left:0;top:0;transform-origin:0 0;opacity:0;width:1440px;height:990px}
+#ring{position:absolute;border:5px solid #EF4E14;border-radius:14px;opacity:0;box-shadow:0 0 0 9999px rgba(13,27,42,0)}
+#card{position:absolute;inset:0;background:#0D1B2A;color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 120px;opacity:0}
+#card .l1{font-size:104px;font-weight:800;letter-spacing:-.035em;line-height:1}
+#card .l2{font-size:56px;font-weight:800;color:#EF4E14;margin-top:28px;letter-spacing:-.02em}
+#card .l3{font-family:'IBM Plex Mono',monospace;font-size:26px;color:#C9D4DF;margin-top:30px}
+</style></head><body>
+<div id="stage">
+  <div id="cap"></div><div id="tag">Real AIS data · 9 Nov 2026</div>
+  <div id="view"></div>
+  <div id="ring"></div>
+  <div id="card"><div class="l1">What's that ship?</div><div class="l2">Vessel Viewer.</div><div class="l3">Real ships · public data · Singapore, Hong Kong, London</div></div>
+</div>
+<script>
+// one timeline: every animation time lives here (also the music step's event map)
+const BPM=136, BAR=4*60/BPM;
+const META=__META__;
+const SHOTS=[
+ {bars:2, cap:["What's","that","*ship?"], imgs:[['c1',0]], cam:[[100,140,1240,698],[150,150,1000,563]], ring:['c1',1.6]},
+ {bars:2, cap:["Tap","one.","Bulk","carrier,","*362 m"], imgs:[['c2',0]], cam:[[100,150,1240,698],[380,170,820,462]], ring:['c2',1.4]},
+ {bars:2, cap:["*843","ships","heard","off","Singapore","in","the","last","hour"], imgs:[['c3',0]], cam:[[100,60,1240,698],[110,240,820,461]], ring:['c3',1.8]},
+ {bars:3, cap:["Where","it's","been:","*Brazil,","China,","here"], imgs:[['c4_1',0],['c4_2',1.5],['c4_4',3.1],['c4_5',4.4]], cam:[[40,90,1300,732],[40,110,1290,726]], ring:['c4',3.6]},
+ {bars:2, cap:["Where","today's","ships","are","*going"], imgs:[['c5',0]], cam:[[90,60,1300,731],[100,110,1240,698]], ring:['c5',1.5]},
+ {bars:2, card:true}
+];
+let acc=0; for(const s of SHOTS){ s.t0=acc; s.dur=s.bars*BAR; acc+=s.dur; }
+window.TOTAL=acc; window.TIMELINE=SHOTS.map(s=>({t0:+s.t0.toFixed(3),dur:+s.dur.toFixed(3),ring:s.ring?+(s.t0+s.ring[1]).toFixed(3):null,card:!!s.card}));
+const view=document.getElementById('view'), cap=document.getElementById('cap'), ring=document.getElementById('ring'), card=document.getElementById('card');
+const IMG={}; for(const s of SHOTS) for(const [k] of (s.imgs||[])) if(!IMG[k]){ const im=new Image(); im.src='cap/'+k+'.png'; view.appendChild(im); IMG[k]=im; }
+const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2, clamp=(a,b,v)=>Math.max(a,Math.min(b,v));
+let curShot=-1;
+function camRect(s,u){ const [a,b]=s.cam, e=ease(u); return a.map((v,i)=>v+(b[i]-v)*e); }
+window.render=function(t){
+  const i=Math.max(0,SHOTS.findIndex(s=>t>=s.t0&&t<s.t0+s.dur)); const s=SHOTS[i===-1?SHOTS.length-1:i], lt=t-s.t0, u=clamp(0,1,lt/s.dur);
+  if(i!==curShot){ curShot=i; cap.innerHTML=(s.cap||[]).map(w=>`<span class="${w[0]==='*'?'a':''}">${w.replace('*','')}</span>`).join(''); }
+  card.style.opacity = s.card ? clamp(0,1,lt/.25) : 0;
+  [...cap.children].forEach((sp,k)=>{ const v=clamp(0,1,(lt-.08-k*.09)/.22); sp.style.opacity=v; sp.style.transform=`translateY(${14*(1-v)}px)`; });
+  const VW=1480,VH=830, r=s.card?[0,0,1440,990]:camRect(s,u), sc=Math.min(VW/r[2],VH/r[3]), ox=(VW-r[2]*sc)/2-r[0]*sc, oy=(VH-r[3]*sc)/2-r[1]*sc;
+  for(const k in IMG){ IMG[k].style.opacity=0; }
+  if(!s.card){ const list=s.imgs; for(let j=0;j<list.length;j++){ const [k,start]=list[j], next=list[j+1]; const fin=clamp(0,1,(lt-start)/.35), fout=next?clamp(0,1,(lt-next[1])/.35):0; const op=j===0?1-fout:fin*(1-fout);
+      const im=IMG[k]; im.style.opacity=op; im.style.transform=`translate(${ox}px,${oy}px) scale(${sc})`; } }
+  if(s.ring && !s.card){ const [key,at]=s.ring, R=META[key].ring, v=clamp(0,1,(lt-at)/.25); const x=60+ox+R[0]*sc-10, y=220+oy+R[1]*sc-8;
+    ring.style.left=x+'px'; ring.style.top=y+'px'; ring.style.width=(R[2]*sc+20)+'px'; ring.style.height=(R[3]*sc+16)+'px'; ring.style.opacity=v; ring.style.transform=`scale(${1.12-.12*v})`; }
+  else ring.style.opacity=0;
+};
+window.ready=()=>Promise.all(Object.values(IMG).map(im=>im.decode())).then(()=>document.fonts.ready);
+</script></body></html>

@@ -33,6 +33,7 @@ header.hero{padding:32px 0 18px;display:flex;flex-direction:column;gap:14px}
 .tabs{display:flex;gap:6px;flex-wrap:wrap}
 .tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:10px 16px;min-height:44px;cursor:pointer;display:flex;gap:8px;align-items:baseline;font-size:15px;font-weight:600}
 .tab small{font-weight:400;color:var(--muted);font-size:12px}
+.tab{white-space:nowrap}
 .tab[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .tab[aria-pressed="true"] small{color:#C9D3DD}
 @media (max-width:640px){.tab small{display:none}}
@@ -63,8 +64,26 @@ header.hero{padding:32px 0 18px;display:flex;flex-direction:column;gap:14px}
 .rr:first-child{border-top:0}
 .rh{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;background:#F6F8FA}
 .st{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;padding:2px 7px;border-radius:5px;white-space:nowrap}
-.st.d{background:var(--ink);color:#fff}.st.g{border:1px solid var(--ink);color:var(--ink)}.st.r{border:1px dashed var(--muted);color:var(--muted)}
+.st.d{background:var(--ink);color:#fff}.st.c{background:#0E5E8A;color:#fff}.st.g{border:1px solid var(--ink);color:var(--ink)}.st.r{border:1px dashed var(--muted);color:var(--muted)}
 @media (max-width:640px){.rr{grid-template-columns:1fr auto}.rr span:nth-child(3){grid-column:1/-1;color:var(--muted)}.rh span:nth-child(3){display:none}}
+.citynav{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0}
+.citynav .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+@media (max-width:640px){header.hero{padding-top:20px;gap:10px}.lede.hero-l{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.controls .right{display:none}.controls{flex-wrap:nowrap}.citynav{width:100%}.citynav .tabs{flex:1}.tab{padding:8px 12px}.nowbar .tour{display:inline-block!important}}
+.nowbar .tour{display:none;min-height:36px;padding:0 14px}
+.arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:22px;line-height:1;cursor:pointer;color:var(--ink)}
+.chap{display:flex;gap:14px;align-items:baseline;margin:6px 0 14px}
+.chap .cn{font-family:var(--mono);font-size:13px;color:#fff;background:var(--ink);border-radius:6px;padding:2px 7px}
+.chap b{font-family:var(--display);font-size:clamp(22px,2.6vw,30px);font-weight:700;letter-spacing:-.02em;display:block;line-height:1.1}
+.chap span:not(.cn){display:block;color:var(--muted);font-size:15px;margin-top:4px}
+.panel > .stats{font-family:var(--mono);font-size:12px;color:var(--muted);padding:10px 16px 12px;border-top:1px solid var(--line)}
+.panel > .stats b{color:var(--ink);font-weight:600}
+.traffic{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:center}
+@media (max-width:940px){.traffic{grid-template-columns:1fr}}
+.steps.bars li{grid-template-columns:1fr auto}
+.bars .bar{grid-column:1/-1;height:4px;border-radius:2px;background:var(--ink);margin-top:2px}
+.h3{font-family:var(--display);font-size:24px;margin:48px 0 0;letter-spacing:-.02em}
+.flow{margin-top:20px;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden}
+.flow svg{display:block;width:100%}
 .below{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;align-items:stretch;margin:20px 0 8px}
 @media (max-width:940px){.below{grid-template-columns:1fr}}
 .czoom{display:flex;gap:4px;background:#EEF2F6;border-radius:999px;padding:3px}
@@ -118,8 +137,8 @@ section.block{padding:56px 0;border-top:1px solid var(--line);margin-top:40px}
 .btabs{display:flex;gap:6px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
 .btab{border:1px solid #2A3E54;background:transparent;color:#C9D4DF;border-radius:8px;padding:0 14px;min-height:44px;cursor:pointer;font-weight:600;font-size:14px}
 .btab[aria-pressed="true"]{background:#F2F5F8;color:var(--ink);border-color:#F2F5F8}
-.bscroll{max-height:470px;overflow:auto;scrollbar-color:#2A3E54 transparent}
-table.flap{border-collapse:separate;border-spacing:0 4px;width:auto}
+.bscroll{max-height:520px;overflow:auto;scrollbar-color:#2A3E54 transparent;padding-bottom:8px}
+table.flap{border-collapse:separate;border-spacing:0 4px;width:100%}
 table.flap th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#8DA0B3;text-align:left;font-weight:500;padding:0 14px 0 0;position:sticky;top:0;background:var(--ink)}
 table.flap td{padding:0 14px 0 0;white-space:nowrap}
 .cells{display:inline-flex;gap:2px}
@@ -163,26 +182,26 @@ body.film header.hero{padding-top:18px}
   <header class="hero">
     <div class="eyebrow">Vessel Viewer</div>
     <h1>What's that ship?</h1>
-    <p class="lede">I grew up in port cities and always wondered which ships were out there, where they'd been and where they were going. Pick a shore. These are the real ships off it, from the live ship-tracking feed.</p>
+    <p class="lede hero-l">I grew up in port cities and always wondered which ships were out there, where they'd been and where they were going. Pick a shore. These are the real ships off it, from the live ship-tracking feed.</p>
     <div class="controls">
-      <div class="tabs" role="group" aria-label="Choose a shore" id="tabs"></div>
-      <div class="right">
-        <div class="zoom" role="group" aria-label="Zoom"><button class="zb" type="button" data-z="1" aria-pressed="true">Eye</button><button class="zb" type="button" data-z="7" aria-pressed="false">Binoculars 7×</button></div>
-        <button class="tour" type="button" id="tourBtn">▶ Tour</button>
-      </div>
+      <div class="citynav"><button class="arrow" type="button" id="prevCity" aria-label="Previous shore">‹</button><div class="tabs" role="group" aria-label="Choose a shore" id="tabs"></div><button class="arrow" type="button" id="nextCity" aria-label="Next shore">›</button></div>
+      <div class="right"><button class="tour" type="button" id="tourBtn">▶ Tour</button></div>
     </div>
   </header>
 
+  <div class="chap"><span class="cn">01</span><div><b>What you'd see from the shore</b><span id="c1sub"></span></div></div>
   <div class="panel" id="horizonPanel">
     <div class="nowbar">
       <div class="t"><span id="nowTitle">From East Coast Park</span> <a class="badge" id="liveBadge" href="#real" style="text-decoration:none"><i></i>REAL SHIPS · AIS</a></div>
-      <div class="stats" id="nowStats"></div>
+      <button class="tour" type="button" onclick="document.getElementById('tourBtn').click()">▶ Tour</button><div class="zoom" role="group" aria-label="Zoom"><button class="zb" type="button" data-z="1" aria-pressed="true">Eye</button><button class="zb" type="button" data-z="7" aria-pressed="false">Binoculars 7×</button></div>
     </div>
     <div class="horizon" id="horizon" tabindex="0" aria-label="Horizon view. Use left and right arrow keys to look around."><canvas id="hz" role="img" aria-label="Horizon view from the shore with ships labelled"></canvas><div class="vign"></div><span class="hint" id="hzhint">Ships drawn to scale with each other · drag to look around · tap a ship</span></div>
     <div class="inview" id="inview" role="group" aria-label="Ships in view"></div>
     <div class="typekey" id="typekey" aria-label="Ship types"></div>
+    <div class="stats" id="nowStats"></div>
   </div>
 
+  <div class="chap" style="margin-top:44px"><span class="cn">02</span><div><b>The same sea, from above</b><span>Zoom out to see every ship the feed can hear.</span></div></div>
   <div class="below">
     <div class="panel">
       <div class="ptitle"><span>From above</span><span class="czoom" role="group" aria-label="Map zoom"><button type="button" data-w="0" aria-pressed="true">Close up</button><button type="button" data-w="1" aria-pressed="false">Whole area</button></span></div>
@@ -193,35 +212,49 @@ body.film header.hero{padding-top:18px}
 </div>
 
 <section class="block" id="journey">
+  <div class="wrap"><div class="chap"><span class="cn">03</span><div><b>Where that ship has been</b><span>Fly back to where it started, then ride along to where it's going.</span></div></div></div>
   <div class="wrap journey">
     <div class="globe" id="globeWrap">
-      <div class="gmode" role="group" aria-label="Globe view"><button type="button" data-g="ship" aria-pressed="true">This ship</button><button type="button" data-g="arrivals" aria-pressed="false">Hong Kong arrivals</button></div>
       <canvas id="gl" role="img" aria-label="Globe showing the selected ship's journey"></canvas>
     </div>
     <div id="jside">
       <div class="eyebrow" id="jeyebrow">The journey</div>
       <h2 id="jtitle" class="vname" style="font-family:var(--mono);letter-spacing:0">—</h2>
+      <p class="lede" id="jstory" style="margin-top:8px"></p>
       <div class="scrub" id="scrub">
         <div class="row"><button class="play" id="play" type="button" aria-label="Play the journey">▶</button><span class="date" id="jdate">today</span><span class="where" id="jwhere"></span></div>
         <input id="jt" type="range" min="0" max="1000" value="1000" aria-label="Date along the journey">
       </div>
       <ul class="steps" id="steps"></ul>
       <div class="legend2"><span><i></i>port calls (Global Fishing Watch)</span><span><i style="border-top-style:dashed;border-color:#7C8C9C"></i>since last port, route inferred</span><span><i style="border-top:2.5px dashed var(--accent)"></i>where the crew says it's going</span></div>
-      <p class="note" style="margin-top:12px">Port history is about 3 days behind. The last few days come from our own recorder of the live feed. Open ocean is routed along real sea lanes. Powered by Global Fishing Watch.</p>
+      <p class="note" style="margin-top:12px">Port calls are at least 3 days behind. The line from the last port to here follows standard sea lanes; only the last hour near the shore is the ship's real track. Powered by Global Fishing Watch.</p>
     </div>
   </div>
 </section>
 
-<section class="block" id="boardSec">
+<section class="block" id="traffic">
   <div class="wrap">
-    <div class="eyebrow">Hong Kong Marine Department · open data</div>
-    <h2 id="boardH">Hong Kong's port, tonight.</h2>
-    <p class="lede" style="margin-top:12px" id="boardLede"></p>
-    <div class="board">
-      <div class="btabs" role="group" aria-label="Board"><button class="btab" type="button" data-b="arrivals" aria-pressed="true">Arriving</button><button class="btab" type="button" data-b="departures" aria-pressed="false">Departed</button></div>
-      <div class="bscroll"><table class="flap"><thead><tr><th id="thT">ETA HKT</th><th>VESSEL</th><th class="hide-s">TYPE</th><th id="thP">FROM</th></tr></thead><tbody id="bbody"></tbody></table></div>
-      <div class="bfoot"><span><b style="color:var(--accent)">●</b> also on our radar off Tsim Sha Tsui · tap to see it</span><button type="button" id="arcsBtn">Map where tonight's ships come from →</button></div>
+    <div class="chap"><span class="cn">04</span><div><b id="trTitle">Where today's ships are going</b><span id="trSub"></span></div></div>
+    <div class="traffic">
+      <div class="globe" id="tgWrap"><div class="gmode" id="trMode" role="group" aria-label="Traffic view"><button type="button" data-m="out" aria-pressed="true">Heading to</button><button type="button" data-m="in" aria-pressed="false">Arriving from</button></div><canvas id="tg" role="img" aria-label="Globe with lines from this port to where today's ships say they are going"></canvas></div>
+      <div><p class="lede" id="trLede"></p><ul class="steps bars" id="trList"></ul><div class="legend2" id="trKey"></div><p class="note" id="trNote" style="margin-top:12px"></p></div>
     </div>
+    <div id="boardWrap">
+      <h3 class="h3">Hong Kong also publishes its port schedule</h3>
+      <p class="lede" style="margin-top:8px" id="boardLede"></p>
+      <div class="board">
+        <div class="btabs" role="group" aria-label="Board"><button class="btab" type="button" data-b="arrivals" aria-pressed="true">Arriving</button><button class="btab" type="button" data-b="departures" aria-pressed="false">Departed</button></div>
+        <div class="bscroll"><table class="flap"><thead><tr><th id="thT">ETA HKT</th><th>VESSEL</th><th class="hide-s">TYPE</th><th id="thP">FROM</th></tr></thead><tbody id="bbody"></tbody></table></div>
+        <div class="bfoot"><span><b style="color:var(--accent)">●</b> also on our feed off Tsim Sha Tsui · tap to see it</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <div class="chap"><span class="cn">05</span><div><b>How it's built</b><span>Public data, all the way down. Each dot is a real record moving through the pipeline.</span></div></div>
+    <div id="flow" class="flow" aria-label="Diagram of the data pipeline"></div>
   </div>
 </section>
 
@@ -234,32 +267,21 @@ body.film header.hero{padding-top:18px}
       <div class="rr rh" role="row"><span role="columnheader">On the page</span><span role="columnheader">Status</span><span role="columnheader">Source and note</span></div>
       <div class="rr" role="row"><span>Ship names, positions, speed, heading</span><span><b class="st d">DATA</b></span><span>Live AIS broadcasts via aisstream.io. Snapshot taken <span class="capd"></span>.</span></div>
       <div class="rr" role="row"><span>Ship length</span><span><b class="st d">DATA</b></span><span>The ship's own AIS broadcast. Some ships send wrong sizes.</span></div>
-      <div class="rr" role="row"><span>Ship type: tanker, gas carrier, cruise, cargo</span><span><b class="st d">DATA</b></span><span>The AIS type code the ship broadcasts.</span></div>
-      <div class="rr" role="row"><span>Ship type: container, bulk carrier, car carrier</span><span><b class="st g">GUESS</b></span><span>AIS only says "cargo". I guess from the name (MSC, COSCO and so on) and size. Shown as "(likely)".</span></div>
-      <div class="rr" role="row"><span>Flag and last port calls</span><span><b class="st d">DATA</b></span><span>Global Fishing Watch port visits. About 3 days behind. Anchorage and bunker stops count as visits.</span></div>
-      <div class="rr" role="row"><span>Where it's heading, and when</span><span><b class="st d">DATA</b></span><span>Typed in by the crew, so it can be wrong or out of date. Matched to UN/LOCODE ports.</span></div>
+      <div class="rr" role="row"><span>Which ships are heard</span><span><b class="st g">PARTIAL</b></span><span>aisstream.io relies on volunteer shore receivers. Some ships are missed, and some send no name or size. Fishing-net buoys are filtered out.</span></div>
+      <div class="rr" role="row"><span>Ship type: tanker, cruise, cargo</span><span><b class="st d">DATA</b></span><span>The AIS type code the ship broadcasts. In Hong Kong, the Marine Department's type is used when the ship is on its schedule.</span></div>
+      <div class="rr" role="row"><span>Ship type: gas carrier</span><span><b class="st g">GUESS</b></span><span>From the name (LNG, LPG, GAS).</span></div>
+      <div class="rr" role="row"><span>Ship type: container, bulk carrier, car carrier</span><span><b class="st g">GUESS</b></span><span>AIS only says "cargo". I guess from the name (MSC, Maersk, COSCO, ORE and so on). Other cargo ships are shown as "Cargo ship". Shown as "(likely)".</span></div>
+      <div class="rr" role="row"><span>Flag and last port calls</span><span><b class="st d">DATA</b></span><span>Global Fishing Watch port visits, at least 3 days behind. Each visit is matched to the nearest UN/LOCODE port within 15 nm; otherwise it is shown as an anchorage. Bunker stops count as visits.</span></div>
+      <div class="rr" role="row"><span>Where it's heading, and when</span><span><b class="st d">DATA</b></span><span>Typed in by the crew, so it can be wrong or out of date. For "A > B" the last port is used. Matched to UN/LOCODE ports.</span></div>
       <div class="rr" role="row"><span>Routes between ports</span><span><b class="st g">INFERRED</b></span><span>Standard sea lanes (searoute), not the ship's real track.</span></div>
-      <div class="rr" role="row"><span>Moving ships</span><span><b class="st d">DATA</b></span><span>Their real positions from the last hour, replayed 60× faster.</span></div>
-      <div class="rr" role="row"><span>Which ships you can see</span><span><b class="st d">COMPUTED</b></span><span>Earth's curve from a 3 m eye height, and land in the way.</span></div>
+      <div class="rr" role="row"><span>Moving ships</span><span><b class="st d">DATA</b></span><span>Their real positions from the last hour, replayed 60× faster. "Under way" means moving at 1 knot or more.</span></div>
+      <div class="rr" role="row"><span>Which ships you can see</span><span><b class="st c">COMPUTED</b></span><span>Earth's curve from a 3 m eye height, and land in the way.</span></div>
       <div class="rr" role="row"><span>Hills on the horizon</span><span><b class="st d">DATA</b></span><span>Real elevation (SRTM terrain tiles, AWS Open Data). Drawn 3× taller than life. Buildings are not drawn.</span></div>
+      <div class="rr" role="row"><span>Where today's ships are going</span><span><b class="st d">DATA</b></span><span>Crew-typed destinations of ships over 60 m seen since the recorder started (<span id="winStart"></span>). Ships that sent no size are left out.</span></div>
       <div class="rr" role="row"><span>Coastlines and map</span><span><b class="st d">DATA</b></span><span>Natural Earth 1:10m.</span></div>
       <div class="rr" role="row"><span>Distance on the horizon</span><span><b class="st r">DRAWN</b></span><span>Bearings and the order of ships are true. Distance is squeezed so near and far ships both fit.</span></div>
       <div class="rr" role="row"><span>Ship drawings</span><span><b class="st r">DRAWN</b></span><span>A generic shape for each type, scaled to the ship's real length. Not what that ship looks like.</span></div>
-      <div class="rr" role="row"><span>Hong Kong board and arrival lines</span><span><b class="st d">DATA</b></span><span>Hong Kong Marine Department open data, captured <span id="capBoard"></span>. Ships due in the next few days. Lines are straight, not routes. Ports I could not place are left off.</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="how">
-  <div class="wrap">
-    <div class="eyebrow">How it is built</div>
-    <h2>Public data, all the way down.</h2>
-    <div class="pipe"><span class="runner" aria-hidden="true"></span>
-      <div class="step"><span class="n">01 INGEST</span><b>Listen</b><p>Live ship broadcasts over a websocket, every minute, for three shores.</p><span class="num" id="pnum1"></span><span class="src">aisstream.io · AIS</span></div>
-      <div class="step"><span class="n">02 RECORD</span><b>Keep</b><p>Our own copy of the stream, so the last 3 days are never a gap.</p><span class="num" id="pnum2"></span><span class="src">Supabase Postgres · pg_cron</span></div>
-      <div class="step"><span class="n">03 CLEAN</span><b>Fix</b><p>One position per ship per 2 min. Crew-typed destinations matched to real ports.</p><span class="num" id="pnum3"></span><span class="src">UN/LOCODE</span></div>
-      <div class="step"><span class="n">04 MODEL</span><b>Join</b><p>Ship + position + port calls + next port. Gaps routed along sea lanes.</p><span class="num" id="pnum4"></span><span class="src">Global Fishing Watch · searoute</span></div>
-      <div class="step"><span class="n">05 SEE</span><b>Look</b><p>The horizon, the chart, the globe. Next: an agent you can ask.</p><span class="num" id="pnum5"></span><span class="src">d3 · canvas</span></div>
+      <div class="rr" role="row"><span>Hong Kong board and arrival lines</span><span><b class="st d">DATA</b></span><span>Hong Kong Marine Department open data, captured <span id="capBoard"></span>. A copy, not live. Ships due in the next few days. Lines are straight, not routes. Ports I could not place are left off.</span></div>
     </div>
   </div>
 </section>
@@ -268,6 +290,7 @@ body.film header.hero{padding-top:18px}
   <div class="wrap">
     <div class="eyebrow">Vessel Viewer</div>
     <h2>Look out.<br>Get the story.</h2>
+    <button class="btn" type="button" style="margin-top:28px;max-width:280px" onclick="stepCity(1);window.scrollTo({top:0,behavior:'smooth'})">Try another shore ↑</button>
     <canvas class="fleet" id="fleet" aria-hidden="true"></canvas>
     <p class="credits" id="credits"></p>
   </div>
@@ -287,7 +310,7 @@ const TYPES = {
   container:{label:'Container', code:'CTR', c:'#2F6FDB', beam:.14, H:.15},
   tanker:{label:'Tanker', code:'TNK', c:'#B4233F', beam:.18, H:.13},
   bulk:{label:'Bulk carrier', code:'BLK', c:'#A97A2B', beam:.16, H:.13},
-  cargo:{label:'General cargo', code:'GEN', c:'#8F6A3A', beam:.17, H:.15},
+  cargo:{label:'Cargo ship', code:'CGO', c:'#8F6A3A', beam:.17, H:.15},
   lng:{label:'Gas carrier', code:'GAS', c:'#0E8A8A', beam:.16, H:.16},
   car:{label:'Car carrier', code:'CAR', c:'#7A55D0', beam:.16, H:.2},
   passenger:{label:'Cruise / passenger', code:'PAX', c:'#C2357F', beam:.12, H:.22},
@@ -339,7 +362,7 @@ const SIDE = {
   tanker(c,L,col,m){ const dk=.04; c.fillStyle=col.hull; hullPath(c,L,dk,.06); c.fill(); c.fillStyle=col.sup; R(c,L,.035,dk,.1,hs(m)); funnel(c,L,.045,dk+hs(m),col);
     c.strokeStyle=col.hull; c.lineWidth=Math.max(.6,L*.004); c.beginPath(); c.moveTo(.16*L,-(dk+.01)*L); c.lineTo(.93*L,-(dk+.01)*L); c.stroke(); c.fillStyle=col.hull; R(c,L,.5,dk,.02,.02); },
   bulk(c,L,col,m){ const dk=.045; c.fillStyle=col.hull; hullPath(c,L,dk,.05); c.fill();
-    const n=m>=270?9:(m>=200?7:5), pitch=(.86-.17)/n; c.fillStyle=col.box[1];
+    const n=m>=270?9:(m>=200?7:5), pitch=(.86-.17)/n; c.fillStyle=col.sup;
     for(let k=0;k<n;k++) R(c,L,.17+k*pitch,dk,pitch*.72,.014);
     if(m<225){ c.fillStyle=col.hull; c.strokeStyle=col.hull; c.lineWidth=Math.max(.6,L*.003); for(let k=1;k<n;k+=Math.ceil(n/4)){ const x=.17+k*pitch-.006; R(c,L,x,dk,.006,.075); c.beginPath(); c.moveTo(x*L,-(dk+.075)*L); c.lineTo((x+.07)*L,-(dk+.04)*L); c.stroke(); } }
     c.fillStyle=col.sup; R(c,L,.03,dk,.1,hs(m)); funnel(c,L,.04,dk+hs(m),col); },
@@ -430,7 +453,7 @@ function frame(){
   });
   drawHorizon(c); drawChart(c);
   const inView = VIEW.filter(v=>v.visible && Math.abs(angDiff(v.b,state.face))<=FOV/2);
-  const s=`<b>${c.ships.length}</b> big ships nearby · <b>${VIEW.filter(v=>v.visible).length}</b> visible from the shore · <b>${inView.length}</b> in this view`;
+  const s=`<b>${c.counts.hour}</b> ships heard nearby in the last hour. Showing the <b>${c.ships.length}</b> biggest. <b>${inView.length}</b> in this view.`;
   if(s!==lastStats){ document.getElementById('nowStats').innerHTML=s; lastStats=s; }
   const chips=inView.sort((a,b)=>a.d-b.d).slice(0,12);
   const key=chips.map(v=>v.sh.id).join()+'|'+state.sel;
@@ -463,21 +486,21 @@ function drawHorizon(c){
   for(let i=-FOV/2-2;i<=FOV/2+2;i+=step){
     const b=(state.face+i+360)%360, L=c.landProfile[Math.round(b*2)%720], s=skyAt(b);
     if(L==null && !s){ samples.push(null); continue; }
-    const near = L!=null && L<=4, base = near ? Math.min(H+2, yOf(Math.max(L,.15)*1852)) : yH+2;
+    const near = L!=null && L<=1.0, base = yH+2;
     const ang = s ? s[0] : .03, dist = s ? s[1] : (L||10);
-    const top = Math.max(yH*.3, yH - Math.max(1.5, ang*ppd*VEX));
+    const raw=Math.max(1.5, ang*ppd*VEX), cap=yH*.5, top = yH - cap*Math.tanh(raw/cap);
     samples.push({X:xOf(b), base, top:Math.min(top, base-2), far: dist>4 && !near});
   }
-  for(const pass of [true,false]){
+  for(const pass of [null]){
     let run=[];
     const flush=()=>{ if(run.length>1){
       const top=d3.line().x(s=>s.X).y(s=>s.top).curve(d3.curveBasis).context(x);
       const bot=d3.line().x(s=>s.X).y(s=>s.base).curve(d3.curveBasis).context(x);
       x.beginPath(); top(run); const rv=[...run].reverse(); x.lineTo(rv[0].X,rv[0].base); { const tmp=[]; bot.context({moveTo:(a,b)=>x.lineTo(a,b),lineTo:(a,b)=>x.lineTo(a,b),bezierCurveTo:(a,b,c2,d,e,f)=>x.bezierCurveTo(a,b,c2,d,e,f),closePath:()=>{}}); bot(rv); } x.closePath();
-      x.fillStyle=pass?'#C9D4DF':'#9FB0C1'; x.fill();
+      const g=x.createLinearGradient(0,yH-yH*.5,0,yH); g.addColorStop(0,'#AEBCCA'); g.addColorStop(1,'#C9D4DF'); x.fillStyle=g; x.fill();
       x.beginPath(); top(run); x.strokeStyle='rgba(13,27,42,.25)'; x.lineWidth=1; x.stroke(); }
       run=[]; };
-    for(const s of samples){ if(s && s.far===pass) run.push(s); else flush(); }
+    for(const s of samples){ if(s) run.push(s); else flush(); }
     flush();
   }
   x.strokeStyle='rgba(13,27,42,.25)'; x.lineWidth=1; x.beginPath(); x.moveTo(0,yH); x.lineTo(W,yH); x.stroke();
@@ -520,7 +543,7 @@ function drawHorizon(c){
     if(r<0) continue; placed.push({o,lx,ly:36+r*34,w,sub});
   }
   for(const p of placed){ const sel=state.sel===p.o.sh.id; x.strokeStyle=sel?ACC:'rgba(13,27,42,.3)'; x.lineWidth=sel?1.5:1; x.beginPath(); x.moveTo(p.o.X,p.ly+28); x.lineTo(p.o.X,p.o.top-3); x.stroke(); }
-  for(const o of HL){ if(placed.some(p=>p.o===o)) continue; x.fillStyle='rgba(13,27,42,.55)'; x.beginPath(); x.arc(o.X,o.top-8,2.5,0,6.283); x.fill(); o.lab=null; }
+  for(const o of HL){ if(!placed.some(p=>p.o===o)) o.lab=null; }
   for(const p of placed){
     const sel=state.sel===p.o.sh.id, hov=state.hover===p.o.sh.id;
     x.fillStyle=sel?ACC:(hov?'#0D1B2A':'rgba(255,255,255,.96)'); x.strokeStyle='rgba(13,27,42,.12)';
@@ -590,6 +613,9 @@ function card(sh){
   const nextNear = sh.next && nmBetween(sh.a,[sh.next.lon,sh.next.lat])<12;
   const status = sh.status==='Underway' ? `Under way · ${sh.kn} kn` : sh.status;
   const route = sh.calls.map(x=>x.port).join(' → ');
+  const first=sh.calls[0], c0=DATA.cities[state.city];
+  const whereNow = sh.status==='Underway' ? `under way at ${sh.kn} knots` : (sh.status==='At anchor'?'at anchor':(sh.status==='Moored'?'moored':'stopped'));
+  const story = first ? `This ${sh.len?sh.len+' m ':''}${typeName(sh).toLowerCase()} was in ${first.port} on ${fmtDay(-first.ago)}${sh.calls.length>1?`, then ${sh.calls.slice(1).map(x=>x.port).join(', ')}`:''}. Now it is ${whereNow}, ${nmBetween(c0.you,sh.b||sh.a).toFixed(1)} nm off ${c0.spot}.` : `No recent port calls on record. Now it is ${whereNow}, ${nmBetween(c0.you,sh.b||sh.a).toFixed(1)} nm off ${c0.spot}.`;
   document.getElementById('shipcard').innerHTML=`
     <div style="display:flex;flex-direction:column;gap:8px">
       <div class="vname shipname">${sh.name}</div>
@@ -597,16 +623,15 @@ function card(sh){
     </div>
     <img class="silho" src="${silhouette(sh)}" alt="${t.label} silhouette, drawn to its length">
     <div class="fromto">
-      <div><div class="k">Last port</div><div class="v">${last?last.port:'Unknown'}</div><div class="s">${last?fmtAgo(last.ago):'no history'}</div></div>
+      <div><div class="k">${sh.here?'In port here since':'Last port'}</div><div class="v">${sh.here?fmtDay(-sh.here.ago-0):(last?last.port:'Unknown')}</div><div class="s">${sh.here?sh.here.port:(last?fmtAgo(last.ago):'no history')}</div></div>
       <div class="arrow" aria-hidden="true">→</div>
-      <div><div class="k">${nextNear?'Here for':'Heading to'}</div><div class="v">${sh.next?sh.next.port:'Not broadcast'}</div><div class="s">${sh.dest_raw?'crew typed: '+sh.dest_raw:''}</div></div>
+      <div><div class="k">${nextNear?'Here for':'Heading to'}</div><div class="v" style="${sh.next?'':'font-size:15px;color:#556576;font-weight:500'}">${sh.next?sh.next.port:'not broadcast'}</div><div class="s">${sh.dest_raw?'crew typed: '+sh.dest_raw:''}</div></div>
     </div>
-    <p class="story">${route?`Last ${sh.calls.length} ports: ${route}.`:'No recent port calls on record.'} Seen ${nmBetween(c.you,sh.b||sh.a).toFixed(1)} nm from ${c.spot}.</p>
+    <p class="story">${story}</p>
     <button class="btn" type="button" id="go">Zoom out to its journey ↓</button>`;
   document.getElementById('go').addEventListener('click',()=>{ showJourney(sh); });
 }
 function showJourney(sh){
-  setGMode('ship',false);
   const el=document.getElementById('journey'); el.scrollIntoView({behavior:reduced?'auto':'smooth'});
   setTimeout(()=>journey(sh,true), reduced?0:750);
 }
@@ -628,7 +653,7 @@ function buildJourney(sh){
   legs.forEach((l,i)=>{ l.t0=ends[i]??0; l.t1=ends[i+1]??l.t0;
     let acc=0; l.cum=[0]; for(let j=1;j<l.coords.length;j++){ acc+=d3.geoDistance(l.coords[j-1],l.coords[j]); l.cum.push(acc); } l.len=acc||1e-9; });
   const here=DATA.cities[state.city];
-  const stops=[...sh.calls.map(c=>({name:c.port,lon:c.lon,lat:c.lat,t:-c.ago,k:'past'})),{name:'Off '+here.name+' (you are here)',lon:(sh.b||sh.a)[0],lat:(sh.b||sh.a)[1],t:0,k:'now'}];
+  const stops=[...sh.calls.map(c=>({name:c.port,lon:c.lon,lat:c.lat,t:-c.ago,k:'past'})),{name:'Off '+here.spot+' (you saw it here)',lon:(sh.b||sh.a)[0],lat:(sh.b||sh.a)[1],t:0,k:'now'}];
   if(tNext!=null) stops.push({name:sh.next.port,lon:sh.next.lon,lat:sh.next.lat,t:tNext,k:'next'});
   return {sh,legs,stops,tMin:Math.min(...ends,0),tMax:Math.max(...ends,0),t:0};
 }
@@ -647,9 +672,9 @@ function drawBase(){
   x.beginPath(); path({type:'Sphere'}); x.fillStyle='#F2F6FA'; x.fill(); x.strokeStyle='#C9D4DF'; x.lineWidth=1; x.stroke();
   x.beginPath(); path(d3.geoGraticule10()); x.strokeStyle='#E3EAF1'; x.lineWidth=.6; x.stroke();
   const sc=gproj.scale(), z=sc/(W*.45);
-  x.beginPath(); path(animating||z<2?LAND110:LAND); x.fillStyle=`rgba(208,218,228,${Math.min(1,Math.max(.3,(z-1)/3))})`; x.fill();
+  x.beginPath(); path(animating||z<2?LAND110:LAND); x.fillStyle='#D3DCE6'; x.fill();
   if(z>2){ x.strokeStyle='rgba(142,160,178,.55)'; x.lineWidth=.6; x.stroke(); }
-  if(z<6){ const dr=Math.max(.8,Math.min(2.2,1.4*Math.sqrt(z)));
+  if(false){ const dr=0;
     for(const d of DATA.worldDots){ const ang=d3.geoDistance(d,center); if(ang>1.5) continue; const p=gproj(d); if(p[0]<-4||p[1]<-4||p[0]>W+4||p[1]>H+4) continue;
       x.globalAlpha=.2+.8*Math.max(0,Math.cos(ang)); x.fillStyle='#A9B8C7'; x.beginPath(); x.arc(p[0],p[1],dr,0,6.283); x.fill(); } x.globalAlpha=1; }
 }
@@ -658,7 +683,6 @@ function drawGlobe(){
   if(!GL) return; drawBase(); const {c:x,W,H}=GL;
   x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,gl.width,gl.height); x.drawImage(BASE,0,0); x.setTransform(GL.dpr,0,0,GL.dpr,0,0);
   const path=d3.geoPath(gproj,x), center=gproj.invert([W/2,H/2]);
-  if(gmode==='arrivals'){ drawArcs(x,path,center); return; }
   if(!JR) return;
   for(const l of JR.legs){ const st=legStyle[l.kind]||legStyle.past;
     x.setLineDash(st.d); x.globalAlpha=l.kind==='next'?.45:.16; x.beginPath(); path({type:'LineString',coordinates:l.coords}); x.strokeStyle=st.s; x.lineWidth=st.w; x.stroke();
@@ -672,13 +696,17 @@ function drawGlobe(){
     if(d3.geoDistance([s.lon,s.lat],center)>1.5) return; const p=gproj([s.lon,s.lat]); const passed=JR.t>=s.t-.01;
     x.beginPath(); x.arc(p[0],p[1],s.k==='now'?6:4.5,0,6.283); x.fillStyle=s.k==='next'?'#fff':(s.k==='now'?ACC:(passed?HULL:'#B8C4D0')); x.fill(); x.strokeStyle=s.k==='next'?ACC:'#fff'; x.lineWidth=2; x.stroke();
     const key=i===0||s.k==='now'||i===n-1; if(!key && !passed) return;
-    const label=s.k==='now'?'you are here':s.name, tw=x.measureText(label).width;
+    const label=s.k==='now'?'you saw it here':(i===0?'started: '+s.name:s.name), tw=x.measureText(label).width;
     const cand=[[p[0]+12,p[1]-12],[p[0]-tw-14,p[1]-12],[p[0]+12,p[1]+20],[p[0]-tw-14,p[1]+20]];
     const spot=cand.find(([lx,ly])=>lx>4&&lx+tw<W-4&&ly>16&&ly<H-4&&boxes.every(b=>lx+tw+6<b[0]||lx>b[0]+b[2]+6||ly<b[1]-18||ly-16>b[1]));
     if(!spot) return; boxes.push([spot[0],spot[1],tw]);
     x.fillStyle='rgba(255,255,255,.94)'; x.fillRect(spot[0]-4,spot[1]-15,tw+8,20); x.fillStyle=s.k==='now'?ACC:'#0D1B2A'; x.fillText(label,spot[0],spot[1]);
   });
-  const m=posAt(JR,JR.t); if(m && d3.geoDistance(m,center)<1.5){ const p=gproj(m); const g=x.createRadialGradient(p[0],p[1],0,p[0],p[1],18); g.addColorStop(0,'rgba(239,78,20,.45)'); g.addColorStop(1,'rgba(239,78,20,0)'); x.fillStyle=g; x.beginPath(); x.arc(p[0],p[1],18,0,6.283); x.fill(); x.beginPath(); x.arc(p[0],p[1],5.5,0,6.283); x.fillStyle=ACC; x.fill(); x.strokeStyle='#fff'; x.lineWidth=1.5; x.stroke(); }
+  const m=posAt(JR,JR.t); if(m && d3.geoDistance(m,center)<1.5){ const p=gproj(m);
+    const dt=.15, m2=posAt(JR,Math.min(JR.tMax,JR.t+dt)), m1=posAt(JR,Math.max(JR.tMin,JR.t-dt)), a=gproj(m1), b=gproj(m2);
+    const hd = (Math.hypot(b[0]-a[0],b[1]-a[1])>.5) ? Math.atan2(b[0]-a[0],-(b[1]-a[1]))/rad : (JR.lastHd||90); JR.lastHd=hd;
+    const g=x.createRadialGradient(p[0],p[1],0,p[0],p[1],26); g.addColorStop(0,'rgba(239,78,20,.35)'); g.addColorStop(1,'rgba(239,78,20,0)'); x.fillStyle=g; x.beginPath(); x.arc(p[0],p[1],26,0,6.283); x.fill();
+    x.save(); x.shadowColor='rgba(13,27,42,.35)'; x.shadowBlur=4; drawTop(x,{type:JR.sh.type,len:300},p,hd,36/300,1,true); x.restore(); }
 }
 function jUI(){
   if(!JR) return; const span=JR.tMax-JR.tMin||1;
@@ -692,29 +720,35 @@ function jUI(){
 function fitScale(all){ const centroid=d3.geoCentroid({type:'MultiPoint',coordinates:all}); const maxAng=Math.max(.02,d3.max(all,p=>d3.geoDistance(p,centroid))); const base=GL.W*.45; return {centroid, scale:Math.max(base*.95, Math.min(base*18, base*.8/Math.sin(Math.min(maxAng,1.4))))}; }
 function journey(sh,animate){
   d3.select(gl).interrupt('globe'); cancelAnimationFrame(playing); playing=null;
-  JR=buildJourney(sh); document.getElementById('jtitle').textContent=sh.name; document.getElementById('jeyebrow').textContent='The journey · real ship';
-  const all=sh.legs.flatMap(l=>l.coords); const {centroid,scale}=fitScale(all.length?all:[sh.a]);
-  const base=GL.W*.45;
-  if(!animate||reduced){ gproj.rotate([-centroid[0],-centroid[1],0]).scale(scale); JR.t=0; drawGlobe(); jUI(); return; }
-  // start close on the ship, pull back to the whole Earth, then settle on the route
-  const p0=sh.b||sh.a; gproj.rotate([-p0[0],-p0[1],0]).scale(base*60); JR.t=JR.tMin; jUI(); animating=true;
-  const r0=gproj.rotate(), mid=[-(p0[0]+centroid[0])/2-25,-(p0[1]+centroid[1])/2,0];
-  const iA=d3.interpolate(r0,mid), iB=d3.interpolate(mid,[-centroid[0],-centroid[1],0]);
-  const sA=d3.interpolate(Math.log(base*60),Math.log(base*.95)), sB=d3.interpolate(Math.log(base*.95),Math.log(scale));
-  d3.select(gl).transition('globe').duration(3000).ease(d3.easeCubicInOut).tween('z',()=>tt=>{
-    if(tt<.6){ const u=d3.easeCubicOut(tt/.6); gproj.rotate(iA(u)).scale(Math.exp(sA(u))); } else { const u=d3.easeCubicInOut((tt-.6)/.4); gproj.rotate(iB(u)).scale(Math.exp(sB(u))); }
-    drawGlobe(); }).on('end',()=>{ animating=false; baseKey=''; drawGlobe(); playJourney(true); }).on('interrupt',()=>{ animating=false; baseKey=''; });
+  JR=buildJourney(sh); document.getElementById('jtitle').textContent=sh.name; document.getElementById('jeyebrow').textContent=`${typeName(sh)} · ${sh.len||'?'} m · real ship`; document.getElementById('jstory').textContent=(sh.calls[0]?`Started in ${sh.calls[0].port} on ${fmtDay(-sh.calls[0].ago)}. `:'')+(sh.next&&nmBetween(sh.a,[sh.next.lon,sh.next.lat])>=12?`Its crew says it is going to ${sh.next.port}.`:'');
+  const all=sh.legs.flatMap(l=>l.coords); JR.fit=fitScale(all.length?all:[sh.a]);
+  const {centroid,scale}=JR.fit;
+  if(!animate||reduced){ gproj.rotate([-centroid[0],-centroid[1],0]).scale(scale); JR.t=reduced?JR.tMax:0; drawGlobe(); jUI(); return; }
+  // fly to where it started, then ride along
+  const s0=JR.stops[0]; JR.t=JR.tMin; jUI(); animating=true;
+  const zFollow=Math.min(GL.W*.45*14, scale*2.2); JR.zFollow=zFollow;
+  const iR=d3.interpolate(gproj.rotate(),[-s0.lon,-s0.lat,0]), iS=d3.interpolate(Math.log(gproj.scale()),Math.log(zFollow));
+  d3.select(gl).transition('globe').duration(1700).ease(d3.easeCubicInOut).tween('z',()=>tt=>{ gproj.rotate(iR(tt)).scale(Math.exp(iS(tt))); drawGlobe(); })
+    .on('end',()=>{ setTimeout(()=>playJourney(true,true),350); }).on('interrupt',()=>{ animating=false; baseKey=''; });
 }
 let playing=null;
-function playJourney(fromStart){
-  if(!JR) return; cancelAnimationFrame(playing); const from=(fromStart||JR.t>=JR.tMax-.01)?JR.tMin:JR.t, to=JR.tMax;
+function settle(){ if(!JR) return; const {centroid,scale}=JR.fit; animating=true;
+  const iR=d3.interpolate(gproj.rotate(),[-centroid[0],-centroid[1],0]), iS=d3.interpolate(Math.log(gproj.scale()),Math.log(scale));
+  d3.select(gl).transition('globe').duration(reduced?0:1400).ease(d3.easeCubicInOut).tween('s',()=>tt=>{ gproj.rotate(iR(tt)).scale(Math.exp(iS(tt))); drawGlobe(); })
+    .on('end',()=>{ animating=false; baseKey=''; drawGlobe(); }).on('interrupt',()=>{ animating=false; baseKey=''; }); }
+function playJourney(fromStart, follow=true){
+  if(!JR) return; d3.select(gl).interrupt('globe'); cancelAnimationFrame(playing); const from=(fromStart||JR.t>=JR.tMax-.01)?JR.tMin:JR.t, to=JR.tMax;
   if(reduced){ JR.t=to; drawGlobe(); jUI(); return; }
-  const dur=Math.max(3500, Math.min(8000,(to-from)*180)), t0=performance.now();
+  const dur=Math.max(5000, Math.min(11000,(to-from)*200)), t0=performance.now(); animating=true;
+  const zF=JR.zFollow||Math.min(GL.W*.45*14, JR.fit.scale*2.2);
   document.getElementById('play').textContent='❚❚';
-  const step=now=>{ const f=Math.min(1,(now-t0)/dur); JR.t=from+(to-from)*d3.easeSinInOut(f); drawGlobe(); jUI(); if(f<1) playing=requestAnimationFrame(step); else { document.getElementById('play').textContent='▶'; playing=null; } };
+  const step=now=>{ const f=Math.min(1,(now-t0)/dur); JR.t=from+(to-from)*d3.easeSinInOut(f);
+    if(follow){ const m=posAt(JR,JR.t), r=gproj.rotate(); gproj.rotate([r[0]+angDiff(-m[0],r[0])*.09, r[1]+(-m[1]-r[1])*.09, 0]); gproj.scale(gproj.scale()+(zF-gproj.scale())*.05); }
+    drawGlobe(); jUI();
+    if(f<1) playing=requestAnimationFrame(step); else { document.getElementById('play').textContent='▶'; playing=null; animating=false; baseKey=''; setTimeout(settle,600); } };
   playing=requestAnimationFrame(step);
 }
-document.getElementById('play').addEventListener('click',()=>{ if(playing){ cancelAnimationFrame(playing); playing=null; document.getElementById('play').textContent='▶'; } else playJourney(false); });
+document.getElementById('play').addEventListener('click',()=>{ if(playing){ cancelAnimationFrame(playing); playing=null; animating=false; baseKey=''; drawGlobe(); document.getElementById('play').textContent='▶'; } else playJourney(false,true); });
 document.getElementById('jt').addEventListener('input',e=>{ if(!JR) return; cancelAnimationFrame(playing); playing=null; document.getElementById('play').textContent='▶'; JR.t=JR.tMin+(+e.target.value/1000)*(JR.tMax-JR.tMin); drawGlobe(); jUI(); });
 const narrow=()=>innerWidth<700;
 d3.select('#globeWrap').call(d3.drag().filter(e=>!(e.pointerType==='touch'&&narrow())&&!e.button)
@@ -723,47 +757,69 @@ d3.select('#globeWrap').call(d3.drag().filter(e=>!(e.pointerType==='touch'&&narr
   .on('end',()=>{ animating=false; baseKey=''; drawGlobe(); }));
 document.getElementById('globeWrap').style.touchAction='pan-y';
 
-/* ---------- Hong Kong arrivals arcs (real data) ---------- */
-const HKG=[114.17,22.29];
-function drawArcs(x,path,center){
-  if(!ARCS) return; const t=ARCS.t;
-  const groups=d3.group(ARCS.rows,r=>r.port);
-  let i=0;
-  for(const [port,rows] of groups){ const r=rows[0]; const f=Math.max(0,Math.min(1,(t*groups.size*.9-i*.9)/3)); i++; if(f<=0) continue;
-    x.setLineDash([]); const interp=d3.geoInterpolate(r.ll,HKG), pts=d3.range(0,f+.001,.02).map(u=>interp(Math.min(u,f)));
-    x.beginPath(); path({type:'LineString',coordinates:pts}); x.strokeStyle=TYPES[r.type].c; x.globalAlpha=.75; x.lineWidth=1+Math.min(3,rows.length*.6); x.stroke(); x.globalAlpha=1;
-    if(d3.geoDistance(r.ll,center)<1.5){ const p=gproj(r.ll); x.beginPath(); x.arc(p[0],p[1],2.5+Math.min(4,rows.length),0,6.283); x.fillStyle=HULL; x.fill();
-      const far=d3.geoDistance(r.ll,HKG)*6371>900; if((far && rows.length>=1 && i%2===0) || rows.length>=5){ x.font='600 11px "IBM Plex Sans", sans-serif'; x.fillStyle='#0D1B2A'; const lb=`${r.port} ${rows.length>1?'×'+rows.length:''}`; x.fillStyle='rgba(255,255,255,.9)'; x.fillRect(p[0]+5,p[1]-18,x.measureText(lb).width+6,16); x.fillStyle='#0D1B2A'; x.fillText(lb,p[0]+8,p[1]-6); } }
+/* ---------- 04 traffic: where today's ships are going (all cities) ---------- */
+const tg=document.getElementById('tg'); let TG; const tproj=d3.geoOrthographic().clipAngle(90).precision(1);
+const TR={mode:'out',t:1,rows:[],hub:null};
+function tgFit(){ TG=setupCanvas(tg); tproj.translate([TG.W/2,TG.H/2]); }
+function trafficRows(){
+  const c=DATA.cities[state.city];
+  if(TR.mode==='in'){ const g=d3.rollups(DATA.board.arrivals.filter(r=>r.ll),v=>({port:v[0].port,ll:v[0].ll,n:v.length,t:d3.greatest(d3.rollups(v,w=>w.length,r=>r.type),q=>q[1])[0]}),r=>r.port).map(d=>d[1]); return g.sort((a,b)=>b.n-a.n); }
+  return c.heading.ports.map(p=>({port:p.port.replace(/\s*\(.*\)$/,''),ll:p.ll,n:p.n,t:p.t==='cargo'?'bulk':p.t}));
+}
+function drawTraffic(){
+  if(!TG) return; const {c:x,W,H}=TG; x.clearRect(0,0,W,H);
+  const path=d3.geoPath(tproj,x), center=tproj.invert([W/2,H/2]);
+  x.beginPath(); path({type:'Sphere'}); x.fillStyle='#F2F6FA'; x.fill(); x.strokeStyle='#C9D4DF'; x.lineWidth=1; x.stroke();
+  x.beginPath(); path(d3.geoGraticule10()); x.strokeStyle='#E3EAF1'; x.lineWidth=.6; x.stroke();
+  x.beginPath(); path(LAND110); x.fillStyle='#D3DCE6'; x.fill();
+  const hub=TR.hub, rows=TR.rows, N=rows.length||1, maxN=d3.max(rows,r=>r.n)||1;
+  rows.forEach((r,i)=>{ const f=Math.max(0,Math.min(1,(TR.t*(N+6)-i)/6)); if(f<=0) return;
+    const a=TR.mode==='out'?hub:r.ll, b=TR.mode==='out'?r.ll:hub, ip=d3.geoInterpolate(a,b), pts=d3.range(0,f+.001,.02).map(u=>ip(Math.min(u,f)));
+    x.beginPath(); path({type:'LineString',coordinates:pts}); x.strokeStyle=(TYPES[r.t]||TYPES.other).c; x.globalAlpha=.7; x.lineWidth=.8+3*Math.sqrt(r.n/maxN); x.stroke(); x.globalAlpha=1;
+    if(f>=1 && d3.geoDistance(r.ll,center)<1.5){ const p=tproj(r.ll); x.beginPath(); x.arc(p[0],p[1],2+3*Math.sqrt(r.n/maxN),0,6.283); x.fillStyle=HULL; x.fill();
+      if(i<5){ const lb=`${r.port} ${r.n}`; x.font='600 11px "IBM Plex Sans", sans-serif'; const w=x.measureText(lb).width; x.fillStyle='rgba(255,255,255,.92)'; x.fillRect(p[0]+5,p[1]-17,w+6,15); x.fillStyle='#0D1B2A'; x.fillText(lb,p[0]+8,p[1]-6); } } });
+  if(d3.geoDistance(hub,center)<1.5){ const p=tproj(hub); x.beginPath(); x.arc(p[0],p[1],6,0,6.283); x.fillStyle=ACC; x.fill(); x.strokeStyle='#fff'; x.lineWidth=2; x.stroke();
+    x.font='700 13px "IBM Plex Sans", sans-serif'; x.fillStyle=ACC; x.fillText(DATA.cities[state.city].name,p[0]+10,p[1]+4); }
+}
+function traffic(animate=true){
+  const c=DATA.cities[state.city], hk=state.city==='hk';
+  if(!hk) TR.mode='out';
+  document.getElementById('trMode').style.display=hk?'':'none';
+  document.querySelectorAll('#trMode button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===TR.mode)));
+  document.getElementById('boardWrap').style.display=hk?'':'none';
+  TR.hub=c.you; TR.rows=trafficRows();
+  const H=c.heading, shown=d3.sum(H.ports,p=>p.n);
+  if(TR.mode==='out'){
+    document.getElementById('trTitle').textContent=`Where today's ships off ${c.name} are going`;
+    const hrs=Math.round((CAPTURED-new Date(H.start))/36e5);
+    document.getElementById('trSub').textContent=`From the destination each crew types into its AIS. Ships over 60 m seen in the last ${hrs} hours (since the recorder started).`;
+    document.getElementById('trLede').innerHTML=`<b>${H.staying}</b> of <b>${H.total}</b> ships named ${c.name} itself. <b>${shown}</b> named a port somewhere else that I could place. <b>${H.unknown}</b> gave nothing usable. ${H.nolen} more sent no size and are left out.`;
+  } else {
+    document.getElementById('trTitle').textContent=`Where Hong Kong's next arrivals are coming from`;
+    document.getElementById('trSub').textContent="From the Marine Department's port schedule. Ships due in the next few days.";
+    document.getElementById('trLede').innerHTML=`<b>${DATA.board.counts.due}</b> ships are due. <b>${d3.sum(TR.rows,r=>r.n)}</b> came from a port I could place on the map.`;
   }
-  const p=gproj(HKG); x.beginPath(); x.arc(p[0],p[1],6,0,6.283); x.fillStyle=ACC; x.fill(); x.strokeStyle='#fff'; x.lineWidth=2; x.stroke();
-  x.font='700 13px "IBM Plex Sans", sans-serif'; x.fillStyle=ACC; x.fillText('Hong Kong',p[0]+10,p[1]+4);
+  const maxN=d3.max(TR.rows,r=>r.n)||1;
+  document.getElementById('trList').innerHTML=TR.rows.slice(0,8).map(r=>`<li class="on"><span class="p">${r.port}</span><span class="w">${r.n} ship${r.n>1?'s':''}</span><span class="bar" style="width:${Math.max(4,r.n/maxN*100)}%;background:${(TYPES[r.t]||TYPES.other).c}"></span></li>`).join('');
+  document.getElementById('trKey').innerHTML=[...new Set(TR.rows.map(r=>r.t))].map(k=>`<span><i style="border-color:${(TYPES[k]||TYPES.other).c};border-top-width:3px"></i>${(TYPES[k]||TYPES.other).label}</span>`).join('');
+  document.getElementById('trNote').textContent= TR.mode==='out' ? 'Lines are straight, not routes. Destinations are typed by crews and can be wrong or stale.' : 'Lines are straight, not routes. Ports I could not place are left off.';
+  // frame the hub and its destinations
+  const pts=[TR.hub,...TR.rows.slice(0,25).map(r=>r.ll)], cen=d3.geoCentroid({type:'MultiPoint',coordinates:pts});
+  const maxAng=d3.max(pts,p=>d3.geoDistance(p,cen))||.3, sc=Math.max(TG.W*.46, Math.min(TG.W*4, TG.W*.42/Math.sin(Math.min(maxAng,1.35))));
+  const r1=[-cen[0],-Math.max(-60,Math.min(60,cen[1])),0];
+  if(!animate||reduced){ tproj.rotate(r1).scale(sc); TR.t=1; drawTraffic(); return; }
+  const iR=d3.interpolate(tproj.rotate(),r1), iS=d3.interpolate(Math.log(tproj.scale()||TG.W*.46),Math.log(sc));
+  d3.select(tg).interrupt('tr').transition('tr').duration(4200).ease(d3.easeCubicInOut).tween('t',()=>u=>{ const v=Math.min(1,u*1.6); tproj.rotate(iR(v)).scale(Math.exp(iS(v))); TR.t=u; drawTraffic(); });
 }
-function setGMode(m, run=true){
-  gmode=m; document.querySelectorAll('.gmode button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.g===m)));
-  document.getElementById('scrub').style.display=m==='ship'?'':'none';
-  document.querySelector('.legend2').style.display=m==='ship'?'':'none';
-  document.querySelector('#jside .note').style.display=m==='ship'?'':'none';
-  document.getElementById('jtitle').style.fontFamily=m==='ship'?'var(--mono)':'var(--display)';
-  if(m==='arrivals'){
-    const rows=DATA.board.arrivals.filter(r=>r.ll); ARCS={rows,t:0};
-    const ports=new Set(rows.map(r=>r.port)).size;
-    document.getElementById('jeyebrow').textContent='Hong Kong Marine Department · real data';
-    document.getElementById('jtitle').textContent=`${DATA.board.counts.due} ships due. Here's where from.`;
-    document.getElementById('steps').innerHTML=d3.rollups(rows,v=>v.length,r=>r.port).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([p,n])=>`<li class="on"><span class="dot" style="background:${HULL}"></span><span class="p">${p}</span><span class="w">${n} ship${n>1?'s':''}</span></li>`).join('')+`<li><span></span><span class="p" style="font-size:12px">${ports} origin ports. ${DATA.board.arrivals.length-rows.length} could not be placed on the map.</span><span></span></li>`;
-    if(!run) return;
-    d3.select(gl).interrupt('globe'); animating=true;
-    const r0=gproj.rotate(), s0=gproj.scale(), ir=d3.interpolate(r0,[-128,-18,0]), is=d3.interpolate(Math.log(s0),Math.log(GL.W*1.15));
-    d3.select(gl).transition('globe').duration(reduced?0:4200).ease(d3.easeCubicInOut).tween('a',()=>tt=>{ gproj.rotate(ir(Math.min(1,tt*1.6))).scale(Math.exp(is(Math.min(1,tt*1.6)))); ARCS.t=tt; drawGlobe(); })
-      .on('end',()=>{ animating=false; baseKey=''; ARCS.t=1; drawGlobe(); }).on('interrupt',()=>{ animating=false; baseKey=''; });
-  } else if(JR && run){ journey(JR.sh,false); }
-}
-document.querySelectorAll('.gmode button').forEach(b=>b.addEventListener('click',()=>setGMode(b.dataset.g)));
-document.getElementById('arcsBtn').addEventListener('click',()=>{ document.getElementById('journey').scrollIntoView({behavior:reduced?'auto':'smooth'}); setTimeout(()=>setGMode('arrivals'),reduced?0:700); });
+document.querySelectorAll('#trMode button').forEach(b=>b.addEventListener('click',()=>{ TR.mode=b.dataset.m; traffic(true); }));
+d3.select('#tgWrap').call(d3.drag().filter(e=>!(e.pointerType==='touch'&&narrow())&&!e.button).on('start',()=>d3.select(tg).interrupt('tr')).on('drag',e=>{ const r=tproj.rotate(), k=.3*TG.W*.46/tproj.scale(); tproj.rotate([r[0]+e.dx*k, Math.max(-80,Math.min(80,r[1]-e.dy*k)),0]); TR.t=1; drawTraffic(); }));
+let trShown=false;
+new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)&&!trShown){ trShown=true; traffic(true); } },{threshold:.3}).observe(document.getElementById('tgWrap'));
 
 /* ---------- departure board ---------- */
 const BD=DATA.board; let boardMode='arrivals', showAll=false;
 const HKNAMES=new Map(DATA.cities.hk.ships.map(s=>[s.name.replace(/\s+/g,' ').toUpperCase(),s]));
-document.getElementById('boardLede').textContent=`${BD.counts.due} ships are due in the next few days, ${BD.counts.inPort} are in port, and ${BD.counts.departed36} left in the last 36 hours. Captured ${BD.snapshot}. Free feed, no key, updated every 20 minutes.`;
+document.getElementById('boardLede').textContent=`A copy captured ${BD.snapshot}: ${BD.counts.due} ships due in the next few days, ${BD.counts.inPort} in port, ${BD.counts.departed36} left in the last 36 hours. The free feed updates every 20 minutes.`;
 const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 function cells(str,n,cls=''){ const s=(str||'').toUpperCase().padEnd(n,' ').slice(0,n); return `<span class="cells ${cls}" data-v="${s.replace(/"/g,'')}">`+[...s].map(ch=>`<span>${ch===' '?'&nbsp;':ch}</span>`).join('')+'</span>'; }
 function board(animate=true){
@@ -780,22 +836,66 @@ function board(animate=true){
 }
 document.querySelectorAll('.btab').forEach(b=>b.addEventListener('click',()=>{ boardMode=b.dataset.b; showAll=false; document.querySelectorAll('.btab').forEach(o=>o.setAttribute('aria-pressed',String(o===b))); board(); }));
 let boardShown=false;
-new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting) && !boardShown){ boardShown=true; board(); } },{threshold:.15}).observe(document.querySelector('.board'));
+new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting) && !boardShown && state.city==='hk'){ boardShown=true; board(); } },{threshold:.15}).observe(document.querySelector('.board'));
 
 /* ---------- pipeline numbers, credits, fleet strip ---------- */
 (function(){
   const cs=Object.values(DATA.cities), ships=cs.flatMap(c=>c.ships);
-  document.getElementById('pnum1').textContent=`3 shores · live`;
-  document.getElementById('pnum2').textContent=`1 row / ship / 2 min`;
-  document.getElementById('pnum3').textContent=`${ships.filter(s=>s.next).length}/${ships.length} destinations matched`;
-  document.getElementById('pnum4').textContent=`${ships.reduce((a,s)=>a+s.calls.length,0)} port calls joined`;
-  document.getElementById('pnum5').textContent=`snapshot ${capStr}`;
   document.getElementById('credits').innerHTML=`Ships are real, from a snapshot of the live AIS feed taken ${capStr}. Moving ships replay their last hour. Ship positions: aisstream.io. Port history: Powered by Global Fishing Watch (non-commercial use). Hong Kong board: Marine Department open data. Coastlines: Natural Earth. Elevation: Terrain Tiles on AWS Open Data (SRTM and others). Built by Ayush Choudhary with Claude Code. Code: github.com/ayushcchoudhary-hub/vessel-viewer.`;
   const k=document.getElementById('fleet'), K=setupCanvas(k); const c=K.c; let xx=10; const pick=ships.filter(s=>s.len>=120).sort((a,b)=>b.len-a.len);
   const types=['container','tanker','bulk','lng','car','passenger']; const order=types.map(t=>pick.find(s=>s.type===t)).filter(Boolean).concat(pick).slice(0,14);
   for(const s of order){ const L=s.len*.32*Math.min(1,K.W/1100); if(xx+L>K.W-10) break; drawSide(c,s.type,xx+L/2,K.H-6,L,1,shipColors(0,false),TYPES[s.type].c,s.len); xx+=L+16; }
   c.fillStyle='#C9D4DF'; c.fillRect(0,K.H-6,K.W,1);
 })();
+
+/* ---------- 05 animated data flow ---------- */
+const FLOWNAMES=Object.values(DATA.cities).flatMap(c=>c.ships.map(s=>s.name)).slice(0,200);
+let FLOW=null;
+function buildFlow(){
+  const el=document.getElementById('flow'); const W=el.clientWidth||1000, vert=W<760; el.innerHTML='';
+  const db=DATA.db||{}; const ships=Object.values(DATA.cities).flatMap(c=>c.ships);
+  const N=[
+    {id:'ais',col:0,row:0,t:"Ships' AIS radios",s:'position, every few seconds',k:'source'},
+    {id:'gfw',col:0,row:1,sh:'Fishing Watch',t:'Global Fishing Watch',s:'port-call history',k:'source'},
+    {id:'hk',col:0,row:2,sh:'HK port',t:'HK Marine Dept',s:'port schedule',k:'source'},
+    {id:'geo',col:0,row:3,sh:'Terrain',t:'Terrain + coastlines',s:'SRTM tiles · Natural Earth',k:'source'},
+    {id:'rec',col:1,row:0,t:'Recorder',s:'listens 55 s, every minute',k:'step'},
+    {id:'db',col:2,row:0,t:'Postgres',s:`${(db.positions||0).toLocaleString()} positions · ${(db.vessels||0).toLocaleString()} ships`,k:'store'},
+    {id:'pipe',col:2,row:2,t:'Pipeline',s:'clean · match · join · route',k:'step'},
+    {id:'page',col:3,row:1,t:'This page',s:`${ships.length} ships · ${Object.keys(DATA.cities).length} shores`,k:'out'}];
+  const E=[['ais','rec'],['rec','db'],['db','pipe'],['gfw','pipe'],['hk','pipe'],['geo','pipe'],['pipe','page']];
+  const H=vert?640:430, nw=vert?Math.min(W-40,300):Math.min(230,(W-120)/4), nh=62, sw=(W-40-16)/3;
+  const pos=n=> vert ? ({ais:[(W-nw)/2,20],rec:[(W-nw)/2,110],db:[(W-nw)/2,200],gfw:[20,300],hk:[20+sw+8,300],geo:[20+2*(sw+8),300],pipe:[(W-nw)/2,440],page:[(W-nw)/2,550]}[n.id]) : [ 20+n.col*((W-40-nw)/3), 24+n.row*((H-48-nh)/3) ];
+  const wOf=n=> vert && n.k==='source' && n.id!=='ais' ? sw : nw;
+  const svg=d3.select(el).append('svg').attr('viewBox',`0 0 ${W} ${H}`).attr('height',H);
+  const P=Object.fromEntries(N.map(n=>[n.id,pos(n)]));
+  const NB=Object.fromEntries(N.map(n=>[n.id,n]));
+  const edge=([a,b])=>{ const [ax,ay]=P[a],[bx,by]=P[b]; if(vert){ const x1=ax+wOf(NB[a])/2,y1=ay+nh,x2=bx+nw/2,y2=by; if(a==='db'&&b==='pipe') return `M${ax+nw-10},${y1} C${W-8},${y1+60} ${W-8},${y2-60} ${bx+nw-10},${y2}`; return `M${x1},${y1} C${x1},${y1+40} ${x2},${y2-40} ${x2},${y2}`; }
+    const x1=ax+nw,y1=ay+nh/2,x2=bx,y2=by+nh/2; if(a==='db'&&b==='pipe') return `M${ax+nw/2},${ay+nh} C${ax+nw/2},${(ay+by)/2+30} ${bx+nw/2},${(ay+by)/2} ${bx+nw/2},${by}`; return `M${x1},${y1} C${x1+60},${y1} ${x2-60},${y2} ${x2},${y2}`; };
+  const paths=svg.append('g').selectAll('path').data(E).join('path').attr('d',edge).attr('fill','none').attr('stroke','#C9D4DF').attr('stroke-width',2);
+  const g=svg.append('g').selectAll('g').data(N).join('g').attr('transform',n=>`translate(${P[n.id][0]},${P[n.id][1]})`);
+  g.append('rect').attr('width',n=>wOf(n)).attr('height',nh).attr('rx',12).attr('fill',n=>n.k==='out'?'#0D1B2A':(n.k==='store'?'#F1F4F7':'#fff')).attr('stroke',n=>n.k==='source'?'#C9D4DF':'#0D1B2A').attr('stroke-width',n=>n.k==='source'?1:1.5);
+  g.append('text').attr('x',14).attr('y',26).text(n=>vert&&wOf(n)<160?n.sh:n.t).attr('font-family','Bricolage Grotesque, sans-serif').attr('font-weight',700).attr('font-size',16).attr('fill',n=>n.k==='out'?'#fff':'#0D1B2A');
+  g.append('text').attr('x',14).attr('y',46).text(n=>vert&&wOf(n)<160?'':n.s).attr('font-family','IBM Plex Mono, monospace').attr('font-size',10.5).attr('fill',n=>n.k==='out'?'#C9D4DF':'#556576');
+  const dots=svg.append('g'); const lab=svg.append('g');
+  FLOW={paths:paths.nodes(),E,dots,lab,t0:performance.now(),packets:[]};
+}
+function flowTick(now){
+  if(FLOW && flowOn && !reduced){
+    const F=FLOW; if(!F.next||now>F.next){ F.next=now+260; const i=(Math.random()*F.E.length)|0, src=F.E[i][0];
+      const name=src==='gfw'?'port call':src==='hk'?'arrival':src==='geo'?'elevation tile':FLOWNAMES[(Math.random()*FLOWNAMES.length)|0]||'position';
+      F.packets.push({i,s:now,d:1700+Math.random()*700,name,show:Math.random()<.35}); }
+    F.packets=F.packets.filter(p=>now-p.s<p.d);
+    const sel=F.dots.selectAll('circle').data(F.packets,p=>p.s); sel.exit().remove();
+    sel.enter().append('circle').attr('r',4).attr('fill',p=>p.i===0||p.i===1?'#EF4E14':'#0D1B2A').merge(sel).each(function(p){ const path=F.paths[p.i], L=path.getTotalLength(), pt=path.getPointAtLength(L*Math.min(1,(now-p.s)/p.d)); this.setAttribute('cx',pt.x); this.setAttribute('cy',pt.y); });
+    const ls=F.lab.selectAll('text').data(F.packets.filter(p=>p.show),p=>p.s); ls.exit().remove();
+    ls.enter().append('text').attr('font-family','IBM Plex Mono, monospace').attr('font-size',10).attr('fill','#556576').text(p=>p.name).merge(ls).each(function(p){ const path=F.paths[p.i], L=path.getTotalLength(), pt=path.getPointAtLength(L*Math.min(1,(now-p.s)/p.d)); this.setAttribute('x',pt.x+7); this.setAttribute('y',pt.y-7); });
+  }
+  requestAnimationFrame(flowTick);
+}
+let flowOn=false;
+new IntersectionObserver(es=>{ flowOn=es.some(e=>e.isIntersecting); },{threshold:0}).observe(document.getElementById('flow'));
+buildFlow(); requestAnimationFrame(flowTick);
 
 /* ---------- tour / film mode ---------- */
 const cap=document.getElementById('caption');
@@ -813,10 +913,11 @@ async function tour(){
     say('look closer'); select(cand.sh.id,false); setZoom(7); await wait(2200);
     say(`${TYPES[cand.sh.type].label.toLowerCase()} · ${cand.sh.len} m`); document.getElementById('shipcard').scrollIntoView({behavior:'smooth',block:'center'}); await wait(2200);
     if(!touring) return;
-    say('where has it been?'); setZoom(1); showJourney(cand.sh); await wait(9500);
+    say('where has it been?'); setZoom(1); showJourney(cand.sh); await wait(4200); say('ride along'); await wait(9000);
     if(!touring) return;
-    say('and the whole port, from the official feed'); document.getElementById('boardSec').scrollIntoView({behavior:'smooth'}); await wait(3200);
-    document.getElementById('journey').scrollIntoView({behavior:'smooth'}); setTimeout(()=>setGMode('arrivals'),700); say(`${DATA.board.counts.due} ships due in Hong Kong`); await wait(5600);
+    say("and where today's ships are going"); document.getElementById('traffic').scrollIntoView({behavior:'smooth'}); setTimeout(()=>traffic(true),700); await wait(5200);
+    if(!touring) return;
+    say('public data, all the way down'); document.getElementById('how').scrollIntoView({behavior:'smooth'}); await wait(3600);
     say('look out. get the story.'); await wait(2200);
   } finally { say(''); touring=false; document.getElementById('tourBtn').textContent='▶ Tour'; }
 }
@@ -825,7 +926,7 @@ document.getElementById('tourBtn').addEventListener('click',()=>{ if(touring){ t
 /* ---------- wiring ---------- */
 function select(id,turn){
   const sh=DATA.cities[state.city].ships.find(s=>s.id===id); if(!sh) return;
-  state.sel=id; card(sh); if(gmode==='ship') journey(sh,false);
+  state.sel=id; card(sh); journey(sh,false);
   if(turn){ const v=VIEW.find(v=>v.sh.id===id); if(v && Math.abs(angDiff(v.b,state.face))>FOV/2-4) turnTo(v.b); }
   lastChips='';
 }
@@ -833,15 +934,22 @@ function setCity(id, selId){
   state.city=id; state.hover=null; state.face=DATA.cities[id].face;
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===id)));
   document.getElementById('nowTitle').textContent='From '+DATA.cities[id].spot;
-  fit(); noteChart(); frame(); typeKey();
+  fit(); noteChart(); frame(); typeKey(); if(TG) traffic(trShown);
+  const ci=CITY_ORDER.indexOf(id); document.getElementById('c1sub').textContent=`${DATA.cities[id].spot}, ${DATA.cities[id].name}. Shore ${ci+1} of ${CITY_ORDER.length}. Use ‹ › to switch.`;
+  if(id==='hk' && boardShown===false && document.getElementById('boardWrap')){ board(false); }
   if(selId){ select(selId,true); return; }
   const near=[...VIEW].filter(v=>v.visible && Math.abs(angDiff(v.b,state.face))<FOV/2 && v.sh.calls.length).sort((a,b)=>(b.sh.len||0)/(1+b.d)-(a.sh.len||0)/(1+a.d))[0] || VIEW[0];
   if(near) select(near.sh.id,false);
 }
-window.addEventListener('resize',()=>{ FOV=zoomBase()/state.zoom; fit(); glFit(); drawGlobe(); frame(); });
+const CITY_ORDER=Object.keys(DATA.cities);
+function stepCity(d){ const i=CITY_ORDER.indexOf(state.city); setCity(CITY_ORDER[(i+d+CITY_ORDER.length)%CITY_ORDER.length]); }
+document.getElementById('prevCity').addEventListener('click',()=>stepCity(-1));
+document.getElementById('nextCity').addEventListener('click',()=>stepCity(1));
+window.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('input,textarea')) return; if(e.key==='['||e.key===',') stepCity(-1); if(e.key===']'||e.key==='.') stepCity(1); });
+window.addEventListener('resize',()=>{ FOV=zoomBase()/state.zoom; fit(); glFit(); drawGlobe(); frame(); tgFit(); traffic(false); buildFlow(); });
 document.getElementById('liveBadge').innerHTML=`<i></i>REAL SHIPS · ${capStr}`;
-document.querySelectorAll('.capd').forEach(e=>e.textContent=capStr); document.getElementById('capBoard').textContent=DATA.board.snapshot;
-FOV=zoomBase(); glFit(); board(false); boardShown=false;
+document.querySelectorAll('.capd').forEach(e=>e.textContent=capStr); document.getElementById('winStart').textContent=new Date(Object.values(DATA.cities)[0].heading.start).toLocaleString('en-GB',{timeZone:'UTC',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' GMT'; document.getElementById('capBoard').textContent=DATA.board.snapshot;
+FOV=zoomBase(); glFit(); tgFit(); board(false); boardShown=false;
 if(location.hash==='#film') document.body.classList.add('film');
 setCity('sg');
 loop();

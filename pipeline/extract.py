@@ -22,6 +22,7 @@ for cid,c in D['cities'].items():
     for m,tr in tracks.items():
         last=tr[-1]
         if last['area']!=cid: continue
+        if not (len(str(m))==9 and str(m)[0] in '234567'): continue
         v=ves.get(m,{})
         d=nm(c['you'],[last['lon'],last['lat']])
         rows.append(dict(mmsi=m, name=v.get('name'), type=v.get('ship_type'), len=v.get('len_m'), beam=v.get('beam_m'), dest=v.get('destination'), eta=v.get('eta'), draught=v.get('draught'), imo=v.get('imo'),
@@ -32,4 +33,18 @@ for cid,c in D['cities'].items():
     big=[r for r in near if (r['len'] or 0)>=80]
     print(cid,'ships',len(rows),'within16nm',len(near),'big(>=80m)',len(big),'with type',sum(1 for r in near if r['type']))
     for r in sorted(big,key=lambda r:r['d'])[:8]: print('   ',r['name'],r['type'],r['len'],r['d'],'nm',r['sog'],'kn',r['dest'])
-json.dump({'captured':now.isoformat(),'cities':out},open('live.json','w'))
+# every ship seen in the last 24 h per area, for the "where they're heading" view
+first=q('positions',{'select':'ts','order':'ts.asc','limit':1})[0]['ts']
+day=max(now-dt.timedelta(hours=24), dt.datetime.fromisoformat(first)).isoformat(); seen={}; off=0
+while True:
+    b=q('positions',{'select':'mmsi,area','ts':'gte.'+day,'order':'ts.asc,mmsi.asc','limit':1000,'offset':off}); off+=1000
+    for p in b:
+        if len(str(p['mmsi']))==9 and str(p['mmsi'])[0] in '234567': seen.setdefault(p['area'],set()).add(p['mmsi'])
+    if len(b)<1000: break
+allm=sorted(set().union(*seen.values())) if seen else []
+vall={}
+for i in range(0,len(allm),150):
+    for v in q('vessels',{'select':'mmsi,name,ship_type,len_m,destination','mmsi':'in.('+','.join(map(str,allm[i:i+150]))+')'}): vall[v['mmsi']]=v
+day24={a:[vall[m] for m in ms if m in vall] for a,ms in seen.items()}
+print({a:len(v) for a,v in day24.items()})
+json.dump({'captured':now.isoformat(),'cities':out,'day24':day24,'dayStart':day},open('live.json','w'))

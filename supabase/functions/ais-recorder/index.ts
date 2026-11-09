@@ -10,6 +10,7 @@ const AREAS: Record<string, number[][]> = {
   sg: [[1.0, 103.5], [1.5, 104.5]],     // Singapore Strait, East Coast Park
   hk: [[22.1, 113.8], [22.6, 114.45]],  // Hong Kong waters
   ldn: [[51.3, 0.4], [51.75, 1.6]],     // Thames estuary, Southend
+  ny: [[40.4, -74.3], [40.75, -73.75]], // New York Harbor, the Narrows
 };
 const SECONDS = 55;
 const THROTTLE_S = 120;

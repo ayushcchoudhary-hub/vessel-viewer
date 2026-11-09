@@ -8,8 +8,9 @@ I grew up in port cities (Singapore, Hong Kong) and always wondered which ships 
 
 - **The horizon.** The ships you'd see from East Coast Park (Singapore), the Tsim Sha Tsui promenade (Hong Kong) or Southend (Thames estuary). Each ship sits at its real bearing and distance.
 - **From above.** The same ships on a chart, with a wedge for the direction you're facing.
+- **New York.** The Narrows, from the Bay Ridge waterfront.
 - **The journey.** Tap a ship and zoom out to a globe: its last port calls, where it is now, and where its crew says it's going.
-- **Hong Kong tonight.** The Marine Department's arrivals and departures board, and a map of where the arriving ships last called.
+- **Where today's ships are going.** The destinations crews broadcast, mapped for each shore. Hong Kong also shows the Marine Department's port schedule.
 
 ## Pipeline
 
@@ -39,6 +40,9 @@ Real data:
 - Hong Kong arrivals, departures and ships in port (Marine Department open data).
 - Coastlines (Natural Earth).
 - Hill outlines on the horizon (elevation from Terrain Tiles on AWS Open Data, SRTM-based). Drawn 3× taller than life. Buildings are not drawn.
+
+Limits:
+- **Coverage is partial.** aisstream.io relies on volunteer shore receivers. Some ships are missed, and some send no name or size.
 
 Drawn or inferred:
 - **Ship type for cargo ships** is a best guess. AIS only says "cargo", so container ships, bulk carriers and car carriers are told apart by name.

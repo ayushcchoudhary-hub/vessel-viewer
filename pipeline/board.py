@@ -27,7 +27,7 @@ arr=[]; miss={}
 for r in ET.parse(F+'RP04005i.xml').getroot().iter('G_SQL1'):
     try: t=dt.datetime.strptime((r.findtext('ETA') or '').strip(),'%Y/%m/%d %H:%M')
     except: continue
-    if t<now_hkt-dt.timedelta(hours=1): continue
+    if t<now_hkt: continue
     p=clean(r.findtext('LAST_PORT')); g=geo(p)
     if not g: miss[p]=miss.get(p,0)+1
     arr.append(dict(t=t.strftime('%a %H:%M'),ts=t.isoformat(),name=(r.findtext('VESSEL_NAME') or '').strip(),type=tmap(r.findtext('SHIP_TYPE')),port=p.title(),ll=g))
