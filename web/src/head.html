@@ -172,6 +172,10 @@ body.film .hint,body.film .meta{display:none}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 
 /* r2 */
+.home{font:600 14px var(--body);color:var(--ink);text-decoration:none;white-space:nowrap;border-bottom:2px solid var(--accent);padding:2px 0}
+.home:hover{color:var(--accent)}
+.home2{display:none;font:500 13px var(--mono);color:var(--muted);text-decoration:none;grid-column:1/-1;margin-bottom:-6px;min-height:32px;align-items:center}
+@media (max-width:1000px){.home{display:none}.home2{display:inline-flex}}
 .receipt .row span:last-child{text-align:right}
 .shores{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
 .shores button{font:600 14px var(--body);border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:0 16px;min-height:40px;cursor:pointer}
@@ -255,11 +259,13 @@ details.real summary{font-size:18px}
   <a class="brand" href="#top"><i></i>Vessel Viewer</a>
   <nav class="steps-nav" aria-label="Sections"><a href="#look" data-s="look"><b>01</b>Look out</a><a href="#pick" data-s="pick"><b>02</b>Where it's been</a><a href="#zoom" data-s="zoom"><b>03</b>Zoom out</a><a href="#how" data-s="how"><b>04</b>Under the hood</a></nav>
   <div class="city" role="group" aria-label="Choose a shore"><button type="button" id="prevCity" aria-label="Previous shore">‹</button><span id="cityName">Singapore</span><button type="button" id="nextCity" aria-label="Next shore">›</button></div>
+  <a class="home" href="https://www.ayushcchoudhary.com/">Main site ↗</a>
 </div></header>
 
 <main id="top">
 <div class="wrap">
   <section class="hero">
+    <a class="home2" href="https://www.ayushcchoudhary.com/">← ayushcchoudhary.com</a>
     <h1>What's that <em>ship?</em></h1>
     <div>
       <p>I grew up in port cities like Singapore and Hong Kong, watching ships on the horizon. I always wondered what they were, where they came from and where they were going. So I built a way to find out, from public data.</p>
@@ -330,7 +336,7 @@ details.real summary{font-size:18px}
   <h3>Ayush Choudhary</h3>
   <p class="r-role">Product builder. AI agents, enterprise deployments, 0 to 1.</p>
   <div id="rcpt"></div>
-  <div class="r-links"><a href="https://www.ayushcchoudhary.com/">Website ↗</a><a href="https://www.linkedin.com/in/ayushc2610/">LinkedIn ↗</a></div>
+  <div class="r-links"><a href="https://www.ayushcchoudhary.com/">Go to my main site ↗</a><a href="https://www.linkedin.com/in/ayushc2610/">LinkedIn ↗</a></div>
   <svg id="rbar" viewBox="0 0 200 34" style="width:200px;height:34px;margin-top:14px" aria-hidden="true"></svg>
   <div class="ty">THANKS FOR LOOKING</div>
   <div><button class="tourbtn ghost" type="button" id="againBtn">Try another shore ↑</button></div>
