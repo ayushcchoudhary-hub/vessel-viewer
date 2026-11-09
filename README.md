@@ -4,13 +4,14 @@ Stand on a shore. See the real ships out there, where they've been and where the
 
 I grew up in port cities (Singapore, Hong Kong) and always wondered which ships were on the horizon. Vessel Viewer answers that with public data: live ship broadcasts, port-call history and a port authority feed, piped into one visual page.
 
+**Try it: https://vessels.ayushcchoudhary.com**
+
 ## What it shows
 
-- **The horizon.** The ships you'd see from East Coast Park (Singapore), the Tsim Sha Tsui promenade (Hong Kong) or Southend (Thames estuary). Each ship sits at its real bearing and distance.
-- **From above.** The same ships on a chart, with a wedge for the direction you're facing.
-- **New York.** The Narrows, from the Bay Ridge waterfront.
-- **The journey.** Tap a ship and zoom out to a globe: its last port calls, where it is now, and where its crew says it's going.
-- **Where today's ships are going.** The destinations crews broadcast, mapped for each shore. Hong Kong also shows the Marine Department's port schedule.
+- **Look out.** The real ships off four shores: East Coast Park (Singapore), the Tsim Sha Tsui promenade (Hong Kong), Southend seafront (Thames Estuary) and the Bay Ridge waterfront (New York). Each ship sits at its real bearing and distance.
+- **Where it's been.** Tap a ship. A globe follows it from its last port calls to where it is now, and shows where its crew says it is going.
+- **Zoom out.** A replay of the last day of traffic off that shore, and the destinations the crews broadcast.
+- **Under the hood.** The data flow, and what is real data, what is inferred and what is drawn.
 
 ## Pipeline
 
