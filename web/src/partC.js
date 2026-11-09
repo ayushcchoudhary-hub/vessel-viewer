@@ -99,5 +99,41 @@ setCity('sg');
 loop(); requestAnimationFrame(tlTick);
 if(location.hash==='#film') setTimeout(tour,1200);
 </script>
+<script type="module">
+/* Visitor analytics: PostHog (US cloud), same setup as ayushcchoudhary.com. First-party: the script is /v.js and data goes to /relay (a Vercel rewrite).
+   Nothing is stored in the browser: no cookies, no banner. Each page load is one anonymous visit.
+   Off away from the live domain, for bots, and when the browser sends Do Not Track or Global Privacy Control. Visit /?notrack once to stop counting your own visits (/?track undoes it). */
+const KEY = 'phc_pV99R48SprP9tisLua6KZ38B9Pr6v2wnaNh3KyLvngEU';
+let off = false;
+try {
+  const q = new URLSearchParams(location.search);
+  if (q.has('notrack')) localStorage.setItem('notrack', '1');
+  if (q.has('track')) localStorage.removeItem('notrack');
+  off = localStorage.getItem('notrack') === '1';
+} catch {}
+if (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.globalPrivacyControl) off = true;
+if (KEY && !off && !navigator.webdriver && location.hostname === 'vessels.ayushcchoudhary.com') {
+  const { default: posthog } = await import('/v.js');
+  posthog.init(KEY, {
+    api_host: '/relay', ui_host: 'https://us.posthog.com',
+    persistence: 'memory', person_profiles: 'identified_only',
+    capture_pageview: false, capture_pageleave: true, autocapture: false,
+    disable_session_recording: true, disable_surveys: true, advanced_disable_flags: true, disable_external_dependency_loading: true
+  });
+  posthog.register({ site: 'vessel-viewer' });
+  posthog.capture('$pageview');
+  if (/[?&](utm_|notrack|track)/.test(location.search)) history.replaceState(history.state, '', location.pathname + location.hash);
+  const ev = (name, props) => posthog.capture(name, props);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="http"]');
+    if (a && a.host !== location.host) ev('link_clicked', { to: a.hostname.replace(/^www\./, ''), label: a.textContent.trim().slice(0, 40) });
+    if (e.target.closest('#tourBtn')) ev('tour_clicked');
+    const sh = e.target.closest('#shores button'); if (sh) ev('shore_changed', { shore: sh.dataset.c });
+    if (e.target.closest('#prevCity, #nextCity')) ev('shore_changed', { shore: 'arrows' });
+    if (e.target.closest('.chip')) ev('ship_picked');
+    if (e.target.closest('#play')) ev('journey_played');
+  }, true);
+}
+</script>
 </body>
 </html>
