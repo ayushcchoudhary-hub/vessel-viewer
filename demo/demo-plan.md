@@ -18,4 +18,4 @@ Notes
 - Real UI and real data only. Ship names are public AIS data.
 - "Bulk carrier" is a guess from the name. The ticket on screen shows "(likely)".
 - The route between ports is inferred along sea lanes. The clip says "where it's been", not "its track".
-- The end card names the project only. Add the live link when the subdomain exists.
+- The end card shows the live link: vessels.ayushcchoudhary.com.
