@@ -26,22 +26,24 @@ html,body{margin:0;background:#FBFCFD}
 // one timeline: every animation time lives here (also the music step's event map)
 const BPM=136, BAR=4*60/BPM;
 const META={"shores": {"ring": [140, 214.625, 1160, 40]}, "ttype": {"ring": [162, 293.21875, 356, 21]}, "steps": {"ring": [566, 865.71875, 732, 54.5]}, "src": {"ring": [182, 246.21875, 220, 340]}, "zsub": {"ring": [140, 172, 300, 26]}};
-const SHOTS=[{"bars": 2, "cap": ["I", "grew", "up", "watching", "ships", "in", "*Singapore", "and", "Hong", "Kong"], "imgs": [["a_sg", 0], ["a_hk", 1.9]], "cam": [[97.4, 204.6, 1245.2, 700.0], [117.4, 204.6, 1182.94, 665.0]], "ring": ["shores", 2.2]}, {"bars": 2, "cap": ["Tap", "one.", "Bulk", "carrier,", "*362 m"], "imgs": [["b_sg", 0], ["c_0", 1.2]], "cam": [[97.4, 204.6, 1245.2, 700.0], [0, 154.1, 1287.2, 723.6]], "ring": ["ttype", 2.1]}, {"bars": 3, "cap": ["Where", "it's", "been:", "*Brazil,", "China,", "here"], "imgs": [["c_1", 0], ["c_2", 1.2], ["c_4", 2.4], ["c_6", 3.5], ["c_7", 4.4]], "cam": [[38.6, 200.1, 1362.8, 766.1], [73.7, 218.1, 1366.3, 768.1]], "ring": ["steps", 3.9]}, {"bars": 2, "cap": ["Then", "zoom", "out:", "*19 hours", "of", "traffic"], "imgs": [["d_0", 0], ["d_1", 0.9], ["d_2", 1.8], ["d_3", 2.7]], "cam": [[110, 150, 1220, 685.8], [110, 150, 1160, 652]], "ring": ["zsub", 1.6]}, {"bars": 2, "cap": ["All", "from", "ship", "radio", "and", "*public data"], "imgs": [["e_0", 0], ["e_1", 1.2]], "cam": [[124, 81.2, 1192, 670.1], [135.9, 114.7, 1072.8, 603.1]], "ring": ["src", 1.5]}, {"bars": 2, "card": true}];
+const SHOTS=[{"bars": 2, "cap": ["I", "grew", "up", "watching", "ships", "in", "*Singapore", "and", "Hong", "Kong"], "imgs": [["a_sg", 0], ["a_hk", 1.9]], "cam": [[97.4, 204.6, 1245.2, 700.0], [117.4, 204.6, 1182.94, 665.0]], "ring": ["shores", 2.2]}, {"bars": 2, "cap": ["What's", "that", "*ship?", "Tap", "one."], "seq": [0, 1.4166666666666667], "cam": [[97.4, 204.6, 1245.2, 700.0], [180.0, 260.2, 1080.0, 607.1]]}, {"bars": 1, "cap": ["Bulk", "carrier,", "*362 m"], "seq": [150, 1.4733333333333334], "cam": [[38.6, 200.1, 1362.8, 766.1], [0, 154.1, 1287.2, 723.6]], "ring": ["ttype", 0.55]}, {"bars": 3, "cap": ["Follow", "it:", "*Brazil,", "China,", "here"], "seq": [228, 2.3044444444444445], "cam": [[38.6, 200.1, 1362.8, 766.1], [73.7, 218.1, 1366.3, 768.1]], "ring": ["steps", 4.3]}, {"bars": 2, "cap": ["Then", "zoom", "out:", "*19 hours", "of", "traffic"], "seq": [594, 1.9833333333333334], "cam": [[110, 150, 1220, 685.8], [110, 150, 1160, 652]], "ring": ["zsub", 1.6]}, {"bars": 2, "cap": ["All", "from", "ship", "radio", "and", "*public data"], "seq": [804, 1.1900000000000002], "cam": [[124, 81.2, 1192, 670.1], [135.9, 114.7, 1072.8, 603.1]], "ring": ["src", 1.5]}, {"bars": 2, "card": true}];
 let acc=0; for(const s of SHOTS){ s.t0=acc; s.dur=s.bars*BAR; acc+=s.dur; }
 window.TOTAL=acc; window.TIMELINE=SHOTS.map(s=>({t0:+s.t0.toFixed(3),dur:+s.dur.toFixed(3),ring:s.ring?+(s.t0+s.ring[1]).toFixed(3):null,card:!!s.card}));
 const view=document.getElementById('view'), cap=document.getElementById('cap'), ring=document.getElementById('ring'), card=document.getElementById('card');
+const LIVE=new Image(); LIVE.style.opacity=0; view.appendChild(LIVE); let liveIdx=-1;
 const IMG={}; for(const s of SHOTS) for(const [k] of (s.imgs||[])) if(!IMG[k]){ const im=new Image(); im.src='cap6/'+k+'.png'; view.appendChild(im); IMG[k]=im; }
 const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2, clamp=(a,b,v)=>Math.max(a,Math.min(b,v));
 let curShot=-1;
 function camRect(s,u){ const [a,b]=s.cam, e=ease(u); return a.map((v,i)=>v+(b[i]-v)*e); }
-window.render=function(t){
+window.render=async function(t){
   const i=Math.max(0,SHOTS.findIndex(s=>t>=s.t0&&t<s.t0+s.dur)); const s=SHOTS[i===-1?SHOTS.length-1:i], lt=t-s.t0, u=clamp(0,1,lt/s.dur);
   if(i!==curShot){ curShot=i; cap.innerHTML=(s.cap||[]).map(w=>`<span class="${w[0]==='*'?'a':''}">${w.replace('*','')}</span>`).join(''); }
   card.style.opacity = s.card ? clamp(0,1,lt/.25) : 0;
   [...cap.children].forEach((sp,k)=>{ const v=clamp(0,1,(lt-.08-k*.09)/.22); sp.style.opacity=v; sp.style.transform=`translateY(${14*(1-v)}px)`; });
   const VW=1480,VH=830, r=s.card?[0,0,1440,990]:camRect(s,u), sc=Math.min(VW/r[2],VH/r[3]), ox=(VW-r[2]*sc)/2-r[0]*sc, oy=(VH-r[3]*sc)/2-r[1]*sc;
   for(const k in IMG){ IMG[k].style.opacity=0; }
-  if(!s.card){ const list=s.imgs; for(let j=0;j<list.length;j++){ const [k,start]=list[j], next=list[j+1]; const fin=clamp(0,1,(lt-start)/.35), fout=next?clamp(0,1,(lt-next[1])/.35):0; const op=j===0?1-fout:fin*(1-fout);
+  if(s.seq){ const idx=Math.min(930,Math.round(s.seq[0]+lt*s.seq[1]*30)); if(idx!==liveIdx){ liveIdx=idx; LIVE.src='live/'+String(idx).padStart(5,'0')+'.jpg'; await LIVE.decode(); } LIVE.style.opacity=1; LIVE.style.transform=`translate(${ox}px,${oy}px) scale(${sc})`; } else LIVE.style.opacity=0;
+  if(!s.card && s.imgs){ const list=s.imgs; for(let j=0;j<list.length;j++){ const [k,start]=list[j], next=list[j+1]; const fin=clamp(0,1,(lt-start)/.35), fout=next?clamp(0,1,(lt-next[1])/.35):0; const op=j===0?1-fout:fin*(1-fout);
       const im=IMG[k]; im.style.opacity=op; im.style.transform=`translate(${ox}px,${oy}px) scale(${sc})`; } }
   if(s.ring && !s.card){ const [key,at]=s.ring, R=META[key].ring, v=clamp(0,1,(lt-at)/.25); const x=60+ox+R[0]*sc-10, y=220+oy+R[1]*sc-8;
     ring.style.left=x+'px'; ring.style.top=y+'px'; ring.style.width=(R[2]*sc+20)+'px'; ring.style.height=(R[3]*sc+16)+'px'; ring.style.opacity=v; ring.style.transform=`scale(${1.12-.12*v})`; }
