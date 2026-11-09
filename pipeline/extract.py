@@ -1,7 +1,7 @@
 import os
 import json, math, datetime as dt
 from sb import q
-D=json.load(open('os.environ.get('GEO_JSON','data/geo.json')'))
+D=json.load(open(os.environ.get('GEO_JSON','data/geo.json')))
 now=dt.datetime.now(dt.timezone.utc)
 since=(now-dt.timedelta(minutes=60)).isoformat()
 pos=[]; off=0

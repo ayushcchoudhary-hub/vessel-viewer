@@ -2,7 +2,7 @@
 
 Tempo: 136 BPM. 1 bar = 1.765 s. 2 bars = 3.53 s.
 Total: 13 bars = 22.9 s. Silent first; music added later.
-Source for every claim: `/home/claude/real/data4.json`, snapshot 9 Nov 2026, 12:24 GMT.
+Source for every claim: `pipeline/data4.json`, snapshot 9 Nov 2026, 12:24 GMT.
 
 | # | Bars | Time | Idea | On screen | Caption | Proof (ring) | Source |
 |---|---|---|---|---|---|---|---|

@@ -1,13 +1,13 @@
 import json, math
-D=json.load(open('os.environ.get('GEO_JSON','data/geo.json')')); LIVE=json.load(open('live.json')); R=json.load(open('real_ships.json')); B=json.load(open('board.json'))
+D=json.load(open(os.environ.get('GEO_JSON','data/geo.json'))); LIVE=json.load(open('live.json')); R=json.load(open('real_ships.json')); B=json.load(open('board.json'))
 def nm(a,b):
     k=math.cos(math.radians(a[1])); return math.hypot((b[0]-a[0])*k*60,(b[1]-a[1])*60)
 def brg(a,b):
     k=math.cos(math.radians(a[1])); return (math.degrees(math.atan2((b[0]-a[0])*k,(b[1]-a[1])))+360)%360
 import re, csv
-_src=open('build_real.py').read(); exec(_src[_src.index('# ---------- UN/LOCODE'):_src.index('# ---------- snap GFW')])
+_src=open('build_real.py').read(); exec(_src[_src.index('# ---------- UN/LOCODE'):_src.index('# ---------- snap GFW')]+_src[_src.index('PORTALIAS={'):_src.index('CITYCC=')])
 import collections
-SKY=json.load(open('os.environ.get('SKYLINE_JSON','data/skyline.json')'))
+SKY=json.load(open(os.environ.get('SKYLINE_JSON','data/skyline.json')))
 out={'db':json.load(open('db_stats.json')),'cities':{},'worldDots':D['worldDots'],'board':B,'captured':R['captured']}
 for cid,c in D['cities'].items():
     c=dict(c); c['ships']=R['ships'][cid]; c.pop('hub',None)
@@ -33,7 +33,7 @@ for cid,c in D['cities'].items():
         d=parse_dest(v.get('destination'))
         if not d or not d.get('ll'): unk+=1; continue
         if nm(c['you'],d['ll'])<40: local+=1; continue
-        k=clean_name(d.get('name','')).title(); a=agg.setdefault(k,{'port':k,'cc':d['cc'],'ll':d['ll'],'n':0,'t':collections.Counter()})
+        _u=clean_name(d.get('name','')).upper(); k='Suez Canal (transit)' if _u in ('SUEZ','AS SUWAYS') else PORTALIAS.get(_u,_u.title()); a=agg.setdefault(k,{'port':k,'cc':d['cc'],'ll':d['ll'],'n':0,'t':collections.Counter()})
         a['n']+=1; t=v.get('ship_type') or 0; a['t']['tanker' if 80<=t<=89 else 'passenger' if 60<=t<=69 else 'cargo' if 70<=t<=79 else 'other']+=1
     hd=sorted(agg.values(),key=lambda a:-a['n'])
     for a in hd: a['t']=a['t'].most_common(1)[0][0]
@@ -41,5 +41,6 @@ for cid,c in D['cities'].items():
     c['counts']={'hour':len(LIVE['cities'][cid]),'hourBig':sum(1 for r in LIVE['cities'][cid] if (r['len'] or 0)>=80),'day':len(LIVE.get('day24',{}).get(cid,[]))}
     if len(c['ships'])<5: print('skip',cid,'(not enough data yet)'); continue
     out['cities'][cid]=c
+if 'ldn' in out['cities']: out['cities']['ldn']['name']='Thames Estuary'
 json.dump(out,open('data4.json','w'),separators=(',',':'))
 import os; print(os.path.getsize('data4.json'))

@@ -1,9 +1,8 @@
-import os
 import json, re, datetime as dt, xml.etree.ElementTree as ET, sys
 sys.argv=['x']
 src=open('build_real.py').read(); src=src[:src.index('MAXN=')]
 exec(src)  # gives LOC, BYNAME, FLAG, parse helpers
-F='os.environ.get('HK_FEED_DIR','data/hk_feed/')'
+F='feed/'
 def tmap(t):
     t=(t or '').upper()
     for k,v in [('CONTAINER','container'),('NATURAL GAS','lng'),('LNG','lng'),('PETROLEUM GAS','lng'),('TANKER','tanker'),('CHEMICAL','tanker'),('BULK','bulk'),('CAR CARRIER','car'),('RO-RO','car'),('RORO','car'),('PASSENGER','passenger'),('CRUISE','passenger')]:

@@ -20,7 +20,7 @@ aisstream.io (websocket) --> Supabase Edge Function (every minute, pg_cron)
                                      v
                      Postgres: positions, vessels, sightings, runs
                                      |
-          Global Fishing Watch API --+--> pipeline/*.py (clean, join, route) --> web/template.html
+          Global Fishing Watch API --+--> pipeline/*.py (clean, join, route) --> web/src/ (built into web/vessel-viewer.html)
           HK Marine Department XML --+
 ```
 
@@ -30,7 +30,7 @@ aisstream.io (websocket) --> Supabase Edge Function (every minute, pg_cron)
 | Record | 1 position per ship per 2 min; 10 days of detail, daily sightings kept | `supabase/migrations/0001_schema.sql` |
 | Clean | Crew-typed destinations matched to UN/LOCODE ports | `pipeline/build_real.py` |
 | Model | Port calls from Global Fishing Watch; gaps routed along sea lanes (searoute) | `pipeline/gfw.py`, `pipeline/build_real.py` |
-| See | Canvas horizon, chart and d3 globe | `web/template.html` |
+| See | Canvas horizon, d3 globe, replay map and flow diagram | `web/src/ (built into web/vessel-viewer.html)` |
 
 ## What is real and what is drawn
 

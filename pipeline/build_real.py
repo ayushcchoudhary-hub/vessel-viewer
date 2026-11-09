@@ -3,7 +3,7 @@ import json, math, re, csv, datetime as dt, sys
 import searoute as sr
 from shapely.geometry import LineString
 from gfw import identity, port_calls
-L=json.load(open('live.json')); D=json.load(open('os.environ.get('GEO_JSON','data/geo.json')'))
+L=json.load(open('live.json')); D=json.load(open(os.environ.get('GEO_JSON','data/geo.json')))
 NOW=dt.datetime.fromisoformat(L['captured'])
 # ---------- UN/LOCODE ----------
 LOC={}; BYNAME={}
@@ -36,14 +36,16 @@ for f in glob.glob('cache/*.json'):
 SG_ANCH=re.compile(r'^(SG ?SIN|SGP|SIN|SG)?[ ,._/-]*\(?(A[EW][A-Z]{0,4}|AS[A-Z]{1,4}|P[EW]B ?G ?-?[A-C]?|PEGB[A-C]?|PGBG|PJSB|ARP|EOPL|WOPL)\)?([ ,._-]*(SG|SIN))?$')
 FIX={'HONG KONG':'HKHKG','HONGKONG':'HKHKG','XIANGGANG':'HKHKG','HK':'HKHKG','AOMEN':'MOMFM','SINGAPORE':'SGSIN','MEDWAY PORTS':'GBMED','SHEERNESS':'GBSHS','SHEKOU':'CNSHK','SUEZ':'EGSUZ','QINGDAO':'CNTAO','XIAMEN':'CNXMN','NINGBO':'CNNGB','TILBURY':'GBTIL','YANTIAN':'CNYTN','NANSHA':'CNNSA','CHIWAN':'CNCWN','CLIFFE':'GBCLF','LONDON':'GBLON','THAMES':'GBLON','PASIR PANJANG':'SGSIN','BATU AMPAR':'IDBTM','BATAM':'IDBTM','PASIR GUDANG':'MYPGU','FELIXSTOWE':'GBFXT','PURFLEET':'GBPFT','GRAYS':'GBGRY','ROCHESTER':'GBRCS','LONDON GATEWAY':'GBLGP','PORT KLANG':'MYPKG','PORT KELANG':'MYPKG'}
 MORE={'MYPGU':('Pasir Gudang','MY',[103.9,1.45]),'GBFXT':('Felixstowe','GB',[1.32,51.95]),'GBPFT':('Purfleet','GB',[0.24,51.48]),'GBRID':('Ridham Dock','GB',[0.77,51.38]),'GBRCS':('Rochester','GB',[0.5,51.39]),'GBGRY':('Grays','GB',[0.33,51.47]),'GBGYS':('Grays','GB',[0.33,51.47]),'GBLON':('London','GB',[0.07,51.5]),'GBLGP':('London Gateway','GB',[0.48,51.5]),'AUNTL':('Newcastle','AU',[151.78,-32.92]),'TWKEL':('Keelung','TW',[121.74,25.14]),'TWTXG':('Taichung','TW',[120.5,24.27]),'IDBTM':('Batam','ID',[104.0,1.15]),'MOMFM':('Macau','MO',[113.55,22.18])}
+MORE.update({'USPEB':('Port Elizabeth','US',[-74.15,40.68]),'USEWR':('Newark','US',[-74.14,40.69]),'USNWK':('Newark','US',[-74.14,40.69]),'USBAY':('Bayonne','US',[-74.11,40.66]),'USNYC':('New York','US',[-74.01,40.70]),'USORF':('Norfolk','US',[-76.30,36.90]),'JPKOJ':('Kagoshima','JP',[130.57,31.58]),'GBGVS':('Gravesend','GB',[0.37,51.44])})
+FIX.update({'ST MALO':'FRSML','WHITEHALL':'USNYC','WHITEHALL TERMINAL':'USNYC','ST GEORGE':'USNYC','CCADDELLS':'USNYC','NYC':'USNYC','NEW YORK':'USNYC'})
 for k,(n,cc,ll) in MORE.items(): LOC[k]=dict(name=n,cc=cc,ll=ll,port=True)
 CTRY=re.compile(r'\b(INDONESIA|INDIA|CHINA|UK|MALAYSIA|VIETNAM|KOREA|JAPAN|THAILAND|PHILIPPINES|TAIWAN|NETHERLANDS|BELGIUM|GERMANY)\b')
 def _one(u):
     u=u.strip(' .,/-')
     if not u: return None
     if SG_ANCH.match(u) and len(u)<=14: return dict(LOC['SGSIN'],name='Singapore')
-    for tok in re.findall(r'\b([A-Z]{2}) ?([A-Z2-9]{3})\b',u):
-        k=tok[0]+tok[1]
+    toks=[a+b for a,b in re.findall(r'\b([A-Z]{2}) ?([A-Z2-9]{3})\b',u)]+[b+a for a,b in re.findall(r'\b([A-Z2-9]{3}) ([A-Z]{2})$',u)]
+    for k in toks:
         if k in LOC and LOC[k].get('ll') and LOC[k].get('port'): return LOC[k]
     v=CTRY.sub(' ',u); v=re.sub(r'^(MY|ID|CN|SG)\s+|\s+(MY|ID|CN|SG)$','',v).strip()
     for name,code in sorted(FIX.items(),key=lambda x:-len(x[0])):
@@ -59,9 +61,9 @@ def clean_name(n):
     return re.sub(r'\s+(Pt|Port)$','',n.strip())
 def parse_dest(s):
     if not s: return None
-    u=re.sub(r'[^A-Z0-9 />,-]',' ',s.upper()).strip()
+    u=re.sub(r'[^A-Z0-9 />,-]',' ',s.upper().replace('.',' ')).strip()
     # "A > B", "A->B", "A TO B": the last part is where it is going
-    parts=[p for p in re.split(r'=?>+|->| TO |-{2,}|\s-\s',u) if p.strip()]
+    parts=[p for p in re.split(r'=?>+|->| TO |-{2,}|\s-\s|(?<=\b[A-Z]{2}[A-Z2-9]{3})-(?=[A-Z]{2}[A-Z2-9]{3}\b)',u) if p.strip()]
     for p in list(reversed(parts))+list(reversed(re.split(r'[/,]',u))):
         r=_one(p)
         if r: return dict(r,name=clean_name(r.get('name')))
@@ -107,21 +109,47 @@ def nmd(a,b):
 def route(a,b,big=False):
     if nmd(a,b)<3: return [a,b]
     try:
-        r=sr.searoute(a,b,units='naut',restrictions=['northwest','panama'] if big else ['northwest']); co=r['geometry']['coordinates']
+        rs=['northwest','panama'] if big else ['northwest']
+        if big=='deep' and not any(nmd(p,[103.85,1.25])<60 for p in (a,b)): rs=rs+['malacca','sunda']
+        r=sr.searoute(a,b,units='naut',restrictions=rs); co=r['geometry']['coordinates']
         co=[a]+co+[b]
         ls=LineString(co).simplify(0.03,preserve_topology=False); return [[round(x,3),round(y,3)] for x,y in ls.coords]
     except Exception as e: return [a,b]
 FLAG={'PRT':'Portugal','PAN':'Panama','LBR':'Liberia','MHL':'Marshall Islands','SGP':'Singapore','HKG':'Hong Kong','CHN':'China','MLT':'Malta','GRC':'Greece','GBR':'UK','NLD':'Netherlands','DEU':'Germany','DNK':'Denmark','BHS':'Bahamas','CYP':'Cyprus','KOR':'South Korea','JPN':'Japan','IND':'India','IDN':'Indonesia','MYS':'Malaysia','NOR':'Norway','BEL':'Belgium','ITA':'Italy','FRA':'France','VNM':'Vietnam','THA':'Thailand','PHL':'Philippines','ATG':'Antigua & Barbuda','TGO':'Togo','CMR':'Cameroon','KNA':'St Kitts & Nevis','PLW':'Palau','TUV':'Tuvalu','COK':'Cook Islands','GAB':'Gabon','SLE':'Sierra Leone','BRB':'Barbados','IOM':'Isle of Man','MDA':'Moldova','TZA':'Tanzania','COM':'Comoros','VCT':'St Vincent','BLZ':'Belize','HND':'Honduras','TWN':'Taiwan','SAU':'Saudi Arabia','ARE':'UAE','TUR':'Turkey','RUS':'Russia','IRN':'Iran','QAT':'Qatar','KWT':'Kuwait','EGY':'Egypt','ESP':'Spain','FIN':'Finland','SWE':'Sweden','POL':'Poland','IRL':'Ireland','LUX':'Luxembourg','USA':'USA','CAN':'Canada','AUS':'Australia','BRA':'Brazil','MEX':'Mexico','PRK':'North Korea','MNG':'Mongolia','LKA':'Sri Lanka','BGD':'Bangladesh','PAK':'Pakistan','KHM':'Cambodia','MMR':'Myanmar','BRN':'Brunei','FJI':'Fiji','VUT':'Vanuatu','GIB':'Gibraltar','BMU':'Bermuda','CYM':'Cayman Islands','HRV':'Croatia','GEO':'Georgia','UKR':'Ukraine'}
 def pretty(p): return (p or '').title().replace('Hongkong','Hong Kong')
+PORTALIAS={'TYBEE ISLAND':'Savannah','LOUDONVILLE':'Albany','MIAMI BEACH':'Miami','FAWLEY':'Southampton (Fawley)','EX MADRAS':'Chennai','EX BOMBAY':'Mumbai','ITAGUAI PT = SEPETIBA':'Itaguaí','ITAGUAI':'Itaguaí','MAGNETIC ISLAND':'Townsville','CHARLESTON HEIGHTS':'Charleston','BROADSTAIRS':'Kent coast anchorage','GREAT WAKERING':'Thames Estuary anchorage','CITY ISLAND':'Long Island Sound anchorage','PANAMA ANCHORAGE PACIFIC':'Panama Canal (Pacific anchorage)','GUISHAN':'Guishan anchorage (Pearl River)','PHILIPPINES':'Philippines (port not named)','VRANGO':'Gothenburg','SENSYU':'Osaka','DALIA':'Dalia oil field (Angola)','TELOK RAMUNIA':'Telok Ramunia (Johor)','COTTESLOE':'Fremantle','RAS SUDR':'Suez Canal anchorage','HORUMERSIEL':'Wilhelmshaven','WANGERLAND':'Wilhelmshaven','ZANDVLIET':'Antwerp','BUTJADINGEN':'Wilhelmshaven','BROTTON':'Teesport','REDCAR':'Teesport','PELABUHAN KLANG':'Port Klang','KLANG':'Port Klang','MAWAN':'Shekou','DONGJIANGKOU':'Dongjiakou (Qingdao)','DONGJIAKOU':'Dongjiakou (Qingdao)','CAUSEWAY BAY':'Hong Kong','KWAI CHUNG':'Hong Kong','TSING YI':'Hong Kong','PONTA DA MADEIRA':'Ponta da Madeira (São Luís)','MAASVLAKTE':'Rotterdam','EUROPOORT':'Rotterdam','BOTLEK':'Rotterdam','SAO LUIS':'Ponta da Madeira (São Luís)','JURONG':'Singapore','PASIR PANJANG':'Singapore','TANJONG PAGAR':'Singapore','KEPPEL':'Singapore','SEMBAWANG':'Singapore','GRAVESEND':'Gravesend','TILBURY':'Tilbury','THAMESPORT':'Thamesport','ISLE OF GRAIN':'Isle of Grain','NEWARK':'Newark','ELIZABETH':'Elizabeth, NJ','BAYONNE':'Bayonne, NJ','JEBEL ALI':'Jebel Ali','FUJAIRAH':'Fujairah','KHOR FAKKAN':'Khor Fakkan'}
+CITYCC={'HK':'Hong Kong','SG':'Singapore','MO':'Macau'}
+def nice_port(raw, lon, lat):
+    """Pick a name a shipping person would use for a GFW port visit."""
+    cands=[]
+    for nm_ in raw:
+        if not nm_: continue
+        u=re.sub(r'\s+(ANCHORAGE|ANCH|ANCHORAGE AREA|TERMINAL)$','',nm_.upper()).strip()
+        if re.match(r'^[A-Z]{2,3}[-_ ]?\d+$',u) or len(u)<4 or re.match(r'^[A-Z]{2} [A-Z]{3}$',u): continue
+        cands.append(u)
+    for u in cands:
+        for k,v in PORTALIAS.items():
+            if u==k or u.startswith(k+' '): return v
+    np_=nearest_port(lon,lat,15)
+    if np_ and np_[1][4] in CITYCC: return CITYCC[np_[1][4]]
+    for u in cands:
+        b_=BYNAME.get(u)
+        if b_ and b_.get('ll') and nmd([lon,lat],b_['ll'])<60: return clean_name(b_['name']).title()
+    if np_:
+        n_=clean_name(np_[1][3]).upper()
+        return PORTALIAS.get(n_, clean_name(np_[1][3]))
+    far=nearest_port(lon,lat,60)
+    return ('anchorage off '+PORTALIAS.get(clean_name(far[1][3]).upper(),clean_name(far[1][3]))) if far else 'at sea'
 def merge_calls(pc, cur):
     out=[]
     for p in pc:
-        np_=nearest_port(p['lon'],p['lat'],15)
-        if np_: name,cc,ll=clean_name(np_[1][3]),np_[1][4],[np_[1][0],np_[1][1]]
-        else:
-            far=nearest_port(p['lon'],p['lat'],60)
-            name=('anchorage off '+clean_name(far[1][3])) if far else ((p['top'] or 'sea area').title()); cc=far[1][4] if far else ''; ll=[p['lon'],p['lat']]
-        name=pretty(re.sub(r' \(.*\)$','',name)).replace('Hongkong','Hong Kong')
+        name=nice_port([p['port'],p['top']],p['lon'],p['lat'])
+        np_=nearest_port(p['lon'],p['lat'],60); cc=np_[1][4] if np_ else ''
+        name=pretty(name) if name.isupper() else name
+        name=PORTALIAS.get(name.upper(),name)
+        if name.startswith('anchorage off '): name='anchorage off '+PORTALIAS.get(name[14:].upper(),name[14:])
+        if name=='at sea': continue
+        if name=='Gravesend' and cc=='US': name='New York (Gravesend Bay)'
         if out and (out[-1]['port']==name or (out[-1]['cc']==cc and nmd([out[-1]['lon'],out[-1]['lat']],[p['lon'],p['lat']])<30)):
             out[-1]['end']=p['end']; continue
         out.append(dict(port=name,cc=cc,start=p['start'],end=p['end'],lon=round(p['lon'],3),lat=round(p['lat'],3)))
@@ -158,8 +186,9 @@ for cid,c in D['cities'].items():
         nxt=None
         if dest:
             dl=dest['ll']
-            nxt=dict(port=pretty(dest.get('name')),cc=dest['cc'],eta=r['eta'] or '',lon=dl[0],lat=dl[1])
-        legs=[]; big=(r['len'] or 0)>=300 or (typ in ('bulk','tanker') and (r['len'] or 0)>=250)
+            dn=clean_name(dest.get('name')).upper(); dn='Suez Canal (transit)' if dn in ('SUEZ','AS SUWAYS') else PORTALIAS.get(dn, pretty(dn))
+            nxt=dict(port=dn,cc=dest['cc'],eta=r['eta'] or '',lon=dl[0],lat=dl[1])
+        legs=[]; big=('deep' if typ in ('bulk','tanker') and (r['len'] or 0)>=320 else ((r['len'] or 0)>=300 or (typ in ('bulk','tanker') and (r['len'] or 0)>=250)))
         pts=[[x['lon'],x['lat']] for x in callsj]
         for a,b in zip(pts,pts[1:]): legs.append(dict(kind='past',coords=route(a,b,big)))
         if pts: legs.append(dict(kind='live',coords=route(pts[-1],cur,big)))
