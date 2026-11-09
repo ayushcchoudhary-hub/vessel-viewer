@@ -4,7 +4,7 @@
 <style>
 html,body{margin:0;background:#FBFCFD}
 #stage{position:relative;width:1600px;height:1100px;overflow:hidden;background:#FBFCFD;font-family:'Bricolage Grotesque',sans-serif;color:#0D1B2A}
-#cap{position:absolute;left:80px;right:80px;top:48px;height:150px;font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+#cap{position:absolute;left:80px;right:80px;top:40px;height:160px;font-size:60px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
 #cap span{display:inline-block;opacity:0;transform:translateY(14px);margin-right:.24em}
 #cap .a{color:#EF4E14}
 #tag{position:absolute;right:80px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:20px;color:#556576}
@@ -14,30 +14,23 @@ html,body{margin:0;background:#FBFCFD}
 #card{position:absolute;inset:0;background:#0D1B2A;color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 120px;opacity:0}
 #card .l1{font-size:104px;font-weight:800;letter-spacing:-.035em;line-height:1}
 #card .l2{font-size:56px;font-weight:800;color:#EF4E14;margin-top:28px;letter-spacing:-.02em}
-#card .l3{font-family:'IBM Plex Mono',monospace;font-size:26px;color:#C9D4DF;margin-top:30px}
+#card .l3{font-family:'IBM Plex Mono',monospace;font-size:24px;color:#C9D4DF;margin-top:30px}
 </style></head><body>
 <div id="stage">
   <div id="cap"></div><div id="tag">Real AIS data · 9 Nov 2026</div>
   <div id="view"></div>
   <div id="ring"></div>
-  <div id="card"><div class="l1">What's that ship?</div><div class="l2">Vessel Viewer.</div><div class="l3">Real ships · public data · Singapore, Hong Kong, London</div></div>
+  <div id="card"><div class="l1">What's that ship?</div><div class="l2">Vessel Viewer.</div><div class="l3">Real ships · public data · Singapore, Hong Kong, Thames Estuary, New York</div></div>
 </div>
 <script>
 // one timeline: every animation time lives here (also the music step's event map)
 const BPM=136, BAR=4*60/BPM;
-const META=__META__;
-const SHOTS=[
- {bars:2, cap:["What's","that","*ship?"], imgs:[['c1',0]], cam:[[100,140,1240,698],[150,150,1000,563]], ring:['c1',1.6]},
- {bars:2, cap:["Tap","one.","Bulk","carrier,","*362 m"], imgs:[['c2',0]], cam:[[100,150,1240,698],[380,170,820,462]], ring:['c2',1.4]},
- {bars:2, cap:["*843","ships","heard","off","Singapore","in","the","last","hour"], imgs:[['c3',0]], cam:[[100,60,1240,698],[110,240,820,461]], ring:['c3',1.8]},
- {bars:3, cap:["Where","it's","been:","*Brazil,","China,","here"], imgs:[['c4_1',0],['c4_2',1.5],['c4_4',3.1],['c4_5',4.4]], cam:[[40,90,1300,732],[40,110,1290,726]], ring:['c4',3.6]},
- {bars:2, cap:["Where","today's","ships","are","*going"], imgs:[['c5',0]], cam:[[90,60,1300,731],[100,110,1240,698]], ring:['c5',1.5]},
- {bars:2, card:true}
-];
+const META={"shores": {"ring": [140, 214.625, 1160, 40]}, "ttype": {"ring": [162, 293.21875, 356, 21]}, "steps": {"ring": [566, 865.71875, 732, 54.5]}, "src": {"ring": [182, 246.21875, 220, 340]}, "zsub": {"ring": [140, 172, 300, 26]}};
+const SHOTS=[{"bars": 2, "cap": ["I", "grew", "up", "watching", "ships", "in", "*Singapore", "and", "Hong", "Kong"], "imgs": [["a_sg", 0], ["a_hk", 1.9]], "cam": [[97.4, 204.6, 1245.2, 700.0], [117.4, 204.6, 1182.94, 665.0]], "ring": ["shores", 2.2]}, {"bars": 2, "cap": ["Tap", "one.", "Bulk", "carrier,", "*362 m"], "imgs": [["b_sg", 0], ["c_0", 1.2]], "cam": [[97.4, 204.6, 1245.2, 700.0], [0, 154.1, 1287.2, 723.6]], "ring": ["ttype", 2.1]}, {"bars": 3, "cap": ["Where", "it's", "been:", "*Brazil,", "China,", "here"], "imgs": [["c_1", 0], ["c_2", 1.2], ["c_4", 2.4], ["c_6", 3.5], ["c_7", 4.4]], "cam": [[38.6, 200.1, 1362.8, 766.1], [73.7, 218.1, 1366.3, 768.1]], "ring": ["steps", 3.9]}, {"bars": 2, "cap": ["Then", "zoom", "out:", "*19 hours", "of", "traffic"], "imgs": [["d_0", 0], ["d_1", 0.9], ["d_2", 1.8], ["d_3", 2.7]], "cam": [[110, 150, 1220, 685.8], [110, 150, 1160, 652]], "ring": ["zsub", 1.6]}, {"bars": 2, "cap": ["All", "from", "ship", "radio", "and", "*public data"], "imgs": [["e_0", 0], ["e_1", 1.2]], "cam": [[124, 81.2, 1192, 670.1], [135.9, 114.7, 1072.8, 603.1]], "ring": ["src", 1.5]}, {"bars": 2, "card": true}];
 let acc=0; for(const s of SHOTS){ s.t0=acc; s.dur=s.bars*BAR; acc+=s.dur; }
 window.TOTAL=acc; window.TIMELINE=SHOTS.map(s=>({t0:+s.t0.toFixed(3),dur:+s.dur.toFixed(3),ring:s.ring?+(s.t0+s.ring[1]).toFixed(3):null,card:!!s.card}));
 const view=document.getElementById('view'), cap=document.getElementById('cap'), ring=document.getElementById('ring'), card=document.getElementById('card');
-const IMG={}; for(const s of SHOTS) for(const [k] of (s.imgs||[])) if(!IMG[k]){ const im=new Image(); im.src='cap/'+k+'.png'; view.appendChild(im); IMG[k]=im; }
+const IMG={}; for(const s of SHOTS) for(const [k] of (s.imgs||[])) if(!IMG[k]){ const im=new Image(); im.src='cap6/'+k+'.png'; view.appendChild(im); IMG[k]=im; }
 const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2, clamp=(a,b,v)=>Math.max(a,Math.min(b,v));
 let curShot=-1;
 function camRect(s,u){ const [a,b]=s.cam, e=ease(u); return a.map((v,i)=>v+(b[i]-v)*e); }
