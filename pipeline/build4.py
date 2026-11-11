@@ -1,4 +1,4 @@
-import json, math
+import json, math, os
 D=json.load(open(os.environ.get('GEO_JSON','data/geo.json'))); LIVE=json.load(open('live.json')); R=json.load(open('real_ships.json')); B=json.load(open('board.json'))
 def nm(a,b):
     k=math.cos(math.radians(a[1])); return math.hypot((b[0]-a[0])*k*60,(b[1]-a[1])*60)
