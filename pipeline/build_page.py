@@ -11,7 +11,7 @@ for c in D['cities'].values():
     c.pop('allShips', None)
 D.pop('board', None)
 js = lambda f: open(SRC + f).read()
-html = '\n;'.join(js(f) for f in ['head.html', 'core.js', 'partA.js', 'horizon.js', 'globe.js', 'partB.js', 'flow.js', 'partC.js'])
+html = '\n;'.join(js(f) for f in ['head.html', 'core.js', 'partA.js', 'horizon.js', 'globe.js', 'partB.js', 'flow.js', 'live.js', 'spot.js', 'partC.js'])
 html = (html.replace('/*DATA*/', json.dumps(D, separators=(',', ':')))
             .replace('/*TL*/', open('timelapse.json').read())
             .replace('/*WORLD*/', open(W + 'world-atlas/land-50m.json').read())

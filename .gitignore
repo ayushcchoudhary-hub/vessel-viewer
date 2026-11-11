@@ -6,3 +6,12 @@ __pycache__/
 *.pyc
 web/vessel-viewer.html
 web/local.html
+
+# pipeline outputs (made by the build)
+pipeline/live.json
+pipeline/board.json
+pipeline/real_ships.json
+pipeline/db_stats.json
+pipeline/data4.json
+pipeline/timelapse.json
+pipeline/cache

@@ -53,9 +53,10 @@ function drawHorizon(c){
   const vs=vis.filter(v=>Math.abs(angDiff(v.b,state.face))<=FOV/2+4).sort((a,b)=>(a.sh.id===state.sel?1:0)-(b.sh.id===state.sel?1:0)||b.d-a.d);
   HL.length=0;
   for(const v of vs){
-    const dm=v.d*1852, X=xOf(v.b), yW=Math.min(H-6, yOf(dm));
+    const dm=v.d*1852, X=xOf(v.b), yW0=Math.min(H-6, yOf(dm)), yW=state.spotK?yW0+(yH+8+(yW0-yH)*.3-yW0)*state.spotK:yW0;   // "Point at a ship": ships sit near the horizon, as in a photo
     const fore=Math.max(.22, Math.abs(Math.sin((v.hd-v.b)*rad)));
-    const Lpx=Math.min(W*.8, Math.max(8, sizeAt(v.sh.len||60,yW)*fore));
+    const Lpage=Math.min(W*.8, Math.max(8, sizeAt(v.sh.len||60,yW)*fore)), kS=state.spotK||0;
+    const Lpx=kS?Lpage+(Math.max(8,Math.atan2((v.sh.len||60)*fore,dm)/rad*ppd)-Lpage)*kS:Lpage;   // "Point at a ship": the size a camera would see
     const dir=Math.sin((v.hd-v.b)*rad)>=0?1:-1;
     const sel=state.sel===v.sh.id, fade=Math.min(.75, Math.max(state.sel&&!sel?.45:0, v.d/16));
     const cutPx=(v.hidden/(v.sh.len||60))*Lpx;
@@ -65,6 +66,7 @@ function drawHorizon(c){
     x.restore();
     HL.push({sh:v.sh,X,y:yW,top:yW-Math.max(4,Lpx*.2)+cutPx,Lpx,d:v.d});
   }
+  if(state.spot){ for(const o of HL) o.lab=null; return; }   // "Point at a ship" draws its own names
   // labels: selected + 5 nearest get boxes; the rest get a dot and a hover name
   const boxed=new Set([...HL].sort((a,b)=>a.d-b.d).slice(0,5).map(o=>o.sh.id)); if(state.sel) boxed.add(state.sel); if(state.hover) boxed.add(state.hover);
   const nRows=Math.max(2,Math.floor((yH-40)/34)), rows=Array.from({length:nRows},()=>[]);

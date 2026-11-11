@@ -261,6 +261,17 @@ details.real summary{font-size:18px}
   .play{width:44px;height:44px}
   .t-name{font-size:22px}
 }
+.hzright{display:flex;align-items:center;gap:8px}
+.spotbtn{border:1.5px solid var(--accent);background:var(--accent);color:#fff;border-radius:999px;padding:0 14px;min-height:38px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+.spotbtn::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:inset 0 0 0 2px var(--accent),inset 0 0 0 6px #fff}
+.spotnew{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;background:#fff;color:var(--accent);border-radius:4px;padding:1px 5px}
+.spot{position:absolute;inset:0;z-index:3;cursor:default}.spot[hidden]{display:none}
+.spot canvas{position:absolute;inset:0;width:100%;height:100%}.spot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}.spot.cam video{display:block}
+.spotmsg{position:absolute;left:10px;top:10px;max-width:calc(100% - 64px);font-family:var(--mono);font-size:12.5px;line-height:1.4;background:rgba(13,27,42,.86);color:#fff;border-radius:8px;padding:7px 10px}
+.spotmsg b{color:#FFC8B0;font-weight:600}.spotmsg a{color:#fff;font-weight:600;margin-left:6px;white-space:nowrap}
+.spottag{position:absolute;left:10px;bottom:82px;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:rgba(255,255,255,.9);border:1px solid var(--ink);border-radius:5px;padding:2px 7px}
+.spotx{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(13,27,42,.86);color:#fff;font-size:18px;line-height:1;cursor:pointer}
+@media (max-width:640px){.spotbtn{padding:0 11px;font-size:12.5px}.hzright{gap:6px}}
 </style>
 </head>
 <body>
@@ -287,8 +298,8 @@ details.real summary{font-size:18px}
     <div class="shores" id="shores" role="group" aria-label="Choose a shore"></div>
     <div class="frame" id="horizonPanel">
       <div class="hzhead"><div class="where"><span id="nowTitle">From East Coast Park</span><a class="badge" id="liveBadge" href="#real"><i></i>SNAPSHOT</a></div>
-        <div class="seg" role="group" aria-label="Zoom"><button class="zb" type="button" data-z="1" aria-pressed="true">Eye</button><button class="zb" type="button" data-z="7" aria-pressed="false">7×</button></div></div>
-      <div class="horizon" id="horizon" tabindex="0" aria-label="Horizon view. Use left and right arrow keys to look around."><canvas id="hz" role="img" aria-label="Horizon view from the shore with ships labelled"></canvas><div class="vign"></div><span class="hint" id="hzhint">Drag to look around · tap a ship</span></div>
+        <div class="hzright"><button class="spotbtn" id="spotBtn" type="button">Point at a ship <span class="spotnew">new</span></button><div class="seg" role="group" aria-label="Zoom"><button class="zb" type="button" data-z="1" aria-pressed="true">Eye</button><button class="zb" type="button" data-z="7" aria-pressed="false">7×</button></div></div></div>
+      <div class="horizon" id="horizon" tabindex="0" aria-label="Horizon view. Use left and right arrow keys to look around."><canvas id="hz" role="img" aria-label="Horizon view from the shore with ships labelled"></canvas><div class="vign"></div><span class="hint" id="hzhint">Drag to look around · tap a ship</span><div class="spot" id="spot" hidden><video id="spotVid" playsinline muted></video><canvas id="spotCv"></canvas><div class="spotmsg" id="spotMsg" aria-live="polite"></div><span class="spottag" id="spotTag"></span><button class="spotx" id="spotX" type="button" aria-label="Close">×</button></div></div>
       <div class="hzfoot"><div class="inview" id="inview" role="group" aria-label="Ships in view"></div><a class="next" id="toPick" href="#pick">Where it's been ↓</a></div>
     </div>
     <div class="meta"><span class="key" id="typekey"></span><span id="nowStats"></span></div>

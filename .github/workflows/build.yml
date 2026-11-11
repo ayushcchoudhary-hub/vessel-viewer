@@ -1,0 +1,67 @@
+# Rebuilds the page from the recorder's database every 6 hours, so the ships and their routes stay current.
+# Scheduled runs use the default branch. A run commits site/index.html, and Vercel deploys that commit.
+name: Build page
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [point-at-a-ship]
+    paths: ['.github/workflows/build.yml']
+
+concurrency:
+  group: build-page-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        working-directory: pipeline
+    env:
+      SUPABASE_URL: https://twgfnjrejumoihageznk.supabase.co
+      # Public by design: a read-only key that Supabase ships to browsers. Not a secret.
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_cV3Qt7i2ubzfdBq-Gq07iw_Q_SryxpR
+      GFW_TOKEN: ${{ secrets.GFW_TOKEN }}
+      NODE_MODULES: ${{ github.workspace }}/pipeline/node_modules/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install
+        run: |
+          pip install searoute==1.6.0 shapely==2.2.0 pillow==12.3.0
+          npm install --no-save world-atlas@2.0.2
+      - name: Saved Global Fishing Watch answers
+        uses: actions/cache@v4
+        with:
+          path: pipeline/cache
+          key: gfw-${{ github.run_id }}
+          restore-keys: gfw-
+      - name: Build
+        run: |
+          python3 extract.py
+          python3 board.py
+          python3 build_real.py
+          python3 db_stats.py
+          python3 build4.py
+          python3 timelapse.py
+          python3 build_page.py
+      - name: Check the page before it can go out
+        run: python3 check_build.py
+      - name: Commit the page
+        working-directory: ${{ github.workspace }}
+        run: |
+          git config user.name "vessel-viewer build"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/index.html
+          if git diff --cached --quiet; then echo "No change."; exit 0; fi
+          git commit -m "Rebuild the page from the recorder ($(date -u +'%d %b %H:%M') UTC)"
+          git push
