@@ -1172,6 +1172,8 @@ function spotAsk(){ spotOpen(''); SP={idle:true}; spotSay('<a href="#" id="spotC
   document.getElementById('spotCamGo').addEventListener('click',e=>{ e.preventDefault(); spotClose(); spotCamera(); });
   document.getElementById('spotDemoGo').addEventListener('click',e=>{ e.preventDefault(); spotClose(); spotDemo(); }); }
 document.getElementById('spotBtn').addEventListener('click',()=>{ if(SP) spotClose(); else spotAsk(); });
+// Not public yet: the photo step is not tested on real photos. Open the page with ?point to see the button.
+if(!new URLSearchParams(location.search).has('point')) document.getElementById('spotBtn').style.display='none';
 document.getElementById('spotX').addEventListener('click',()=>{ const p=SP&&SP.prevSel, had=SP&&SP.picked; spotClose(); if(p&&!had) select(p,false); });
 
 ;
