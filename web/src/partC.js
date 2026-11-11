@@ -76,7 +76,7 @@ function setCity(id, selId){
   state.city=id; state.hover=null; state.face=DATA.cities[id].face; const c=DATA.cities[id];
   document.getElementById('cityName').textContent=c.name; document.querySelectorAll('#shores button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===id));
   document.getElementById('nowTitle').textContent=`From ${c.spot}, ${c.name}`;
-  document.getElementById('liveBadge').innerHTML=`<i></i>SNAPSHOT · ${CAPTURED.toLocaleString('en-GB',{timeZone:TZ[id],day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})} local`;
+  applyLive(id); setBadge(id); if(!LIVE[id]) loadLive(id);
   fit(); frame(); typeKey(); dest(); tlBars();
   if(TLC){ tlFit(); if(TLS.seen){ TLS.t=prepTL(id).k0; d3.select(tlc).call(tlZoom.transform,d3.zoomIdentity); } }
   const near=selId?{sh:c.ships.find(s=>s.id===selId)}:[...VIEW].filter(v=>v.visible && Math.abs(angDiff(v.b,state.face))<FOV/2 && v.sh.calls.length).sort((a,b)=>(b.sh.len||0)/(1+b.d)-(a.sh.len||0)/(1+a.d))[0] || [...VIEW].filter(v=>v.visible).sort((a,b)=>(b.sh.len||0)/(1+b.d)-(a.sh.len||0)/(1+a.d))[0] || {sh:c.ships[0]};
