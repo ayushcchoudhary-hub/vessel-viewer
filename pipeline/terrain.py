@@ -2,7 +2,7 @@ import os
 import math, json, os, io, urllib.request, ssl
 from PIL import Image
 ctx=ssl.create_default_context(cafile=os.environ.get('SSL_CERT_FILE'))
-D=json.load(open('os.environ.get('DATA_JSON','data4.json')'))
+D=json.load(open(os.environ.get('DATA_JSON','data4.json')))
 Z=12; R_E=6371000; K_REF=0.13; H_OBS=3.0
 def tile(x,y):
     f=f'data/tiles/{Z}_{x}_{y}.png'
