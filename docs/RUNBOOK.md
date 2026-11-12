@@ -5,10 +5,11 @@
 | Part | Where | How often | What it does |
 |---|---|---|---|
 | Recorder | Supabase (`ais-recorder-every-minute`) | every minute | Listens to ship radio (aisstream) and stores positions |
-| Trim | Supabase (`ais-rollup-nightly`) | 00:17 UTC | Rolls up old rows so the database stays small |
+| Trim | Supabase (`ais-rollup-nightly`) | 00:17 UTC | Keeps at most 10 days and at most 1.8 million positions (about 250 MB). Oldest rows go first. |
 | Live API | Vercel (`site/api/live.js`) | on each visit, cached 60 s | Latest position of each ship in the last 30 minutes |
 | Build | GitHub Actions (`build.yml`) | about every 6 hours | Rebuilds the page: ships, port calls (Global Fishing Watch), routes. Commits `site/index.html`. Vercel deploys it. |
-| Health check | GitHub Actions (`health.yml`) | every 3 hours | Fails, and GitHub emails the owner, if the live API or the page is stale |
+| Health check | GitHub Actions (`health.yml`) | every 3 hours | Fails, and GitHub emails the owner, if the live API or the page is stale, the database is over 350 MB, or the recorder has stopped |
+| Daily check | Claude scheduled task | 08:37 London | A second look, with a push notification. The prompt is in `docs/daily-check-prompt.md`. |
 
 GitHub schedules can be late by an hour or skipped. The live positions do not depend on them.
 
@@ -25,10 +26,9 @@ GitHub schedules can be late by an hour or skipped. The live positions do not de
 
 ## Things to watch (not automatic)
 
-- Database size. Free limit is 500 MB. Check in Supabase: Database, then Usage.
 - Supabase pauses free projects that get no use. The recorder keeps it in use.
 - GitHub turns off schedules in repos with no activity for 60 days. The build's own commits count as activity.
-- Hong Kong arrivals board: `pipeline/feed/*.xml` is a fixed copy from 9 Nov 2026. No script refreshes it yet.
+- Hong Kong vessel lists: each build downloads fresh files (`fetch_feed.py`). If the Marine Department site is down, the build uses the last copy in `pipeline/feed/`.
 - Keys: `GFW_TOKEN` (GitHub secret), `OPENROUTER_API_KEY` (Vercel, only for the hidden photo step), the aisstream key (Supabase).
 
 ## Run the build by hand

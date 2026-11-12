@@ -48,6 +48,7 @@ jobs:
       - name: Build
         run: |
           python3 extract.py
+          python3 fetch_feed.py
           python3 board.py
           python3 build_real.py
           python3 db_stats.py
