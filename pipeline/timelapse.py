@@ -1,9 +1,17 @@
 import json, math, collections, datetime as dt
 from sb import q
-rows=[]; off=0
+# Only the last 24 hours are replayed, so only read those. Page by time, not by offset:
+# an offset of several hundred thousand rows makes the database time out.
+cur=(dt.datetime.now(dt.timezone.utc)-dt.timedelta(hours=24, minutes=20)).isoformat()
+rows=[]; seen=set()
 while True:
-    b=q('positions',{'select':'mmsi,ts,area,lat,lon,sog','order':'ts.asc,mmsi.asc','limit':1000,'offset':off}); rows+=b; off+=1000
+    b=q('positions',{'select':'mmsi,ts,area,lat,lon,sog','ts':'gte.'+cur,'order':'ts.asc,mmsi.asc','limit':1000})
+    new=[r for r in b if (r['mmsi'],r['ts']) not in seen]
+    for r in new: seen.add((r['mmsi'],r['ts']))
+    rows+=new
     if len(b)<1000: break
+    if not new: raise SystemExit('more than 1000 positions share one timestamp: page size is too small')
+    cur=b[-1]['ts']
 print('positions',len(rows))
 BUCKET=600
 end=max(r['ts'] for r in rows); endt=dt.datetime.fromisoformat(end).timestamp()
