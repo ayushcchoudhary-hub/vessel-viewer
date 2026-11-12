@@ -1,0 +1,22 @@
+# Checks the public site every 3 hours. If the recorder, the live API or the scheduled build stops,
+# this run fails and GitHub emails the repo owner. See docs/RUNBOOK.md for what to do.
+name: Health check
+
+on:
+  schedule:
+    - cron: '47 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python3 pipeline/health.py
