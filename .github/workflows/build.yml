@@ -1,10 +1,11 @@
-# Rebuilds the page from the recorder's database every 6 hours, so the ships and their routes stay current.
+# Rebuilds the page from the recorder's database every 2 hours, so the ships and their routes stay current.
+# GitHub often skips or delays scheduled runs, so the schedule is more frequent than it needs to be.
 # Scheduled runs use the default branch. A run commits site/index.html, and Vercel deploys that commit.
 name: Build page
 
 on:
   schedule:
-    - cron: '17 */6 * * *'
+    - cron: '17 */2 * * *'
   workflow_dispatch:
   push:
     branches: [point-at-a-ship]

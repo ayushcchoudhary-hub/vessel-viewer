@@ -7,7 +7,7 @@
 | Recorder | Supabase (`ais-recorder-every-minute`) | every minute | Listens to ship radio (aisstream) and stores positions |
 | Trim | Supabase (`ais-rollup-nightly`) | 00:17 UTC | Keeps at most 10 days and at most 1.8 million positions (about 250 MB). Oldest rows go first. |
 | Live API | Vercel (`site/api/live.js`) | on each visit, cached 60 s | Latest position of each ship in the last 30 minutes |
-| Build | GitHub Actions (`build.yml`) | about every 6 hours | Rebuilds the page: ships, port calls (Global Fishing Watch), routes. Commits `site/index.html`. Vercel deploys it. |
+| Build | GitHub Actions (`build.yml`) | every 2 hours (GitHub skips some runs) | Rebuilds the page: ships, port calls (Global Fishing Watch), routes. Commits `site/index.html`. Vercel deploys it. |
 | Health check | GitHub Actions (`health.yml`) | every 3 hours | Fails, and GitHub emails the owner, if the live API or the page is stale, the database is over 350 MB, or the recorder has stopped |
 | Daily check | Claude scheduled task | 08:37 London | A second look, with a push notification. The prompt is in `docs/daily-check-prompt.md`. |
 
