@@ -19,6 +19,8 @@ async function rest(path, range) {
 export default async function handler(req, res) {
   const area = String((req.query && req.query.area) || '');
   if (!AREAS.has(area)) return res.status(400).json({ error: 'area must be sg, hk, ldn or ny' });
+  // Only ?area=xx is allowed. Any other parameter would make a new cache entry and send the request to the database.
+  if (req.method !== 'GET' || Object.keys(req.query || {}).some((k) => k !== 'area')) return res.status(400).json({ error: 'only ?area= is allowed' });
   try {
     const since = new Date(Date.now() - WINDOW_MIN * 60000).toISOString();
     const latest = new Map();                                   // rows arrive newest first, so the first row per ship is its latest

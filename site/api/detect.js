@@ -11,6 +11,11 @@ List ships left to right. Leave out buoys, land, and boats shorter than about 1%
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
+  // Each call costs money at the model provider, so this stays off until the photo feature is public.
+  // Turn it on with DETECT_ENABLED=1 in Vercel, and set a spending limit on the OpenRouter key first.
+  if (process.env.DETECT_ENABLED !== '1') return res.status(503).json({ error: 'the vision step is switched off' });
+  const origin = req.headers.origin || '';
+  if (origin && !/^https:\/\/(vessels\.ayushcchoudhary\.com|vessel-viewer-[a-z0-9-]+\.vercel\.app)$/.test(origin)) return res.status(403).json({ error: 'not allowed from this site' });
   if (!process.env.OPENROUTER_API_KEY || !process.env.VISION_MODEL) return res.status(503).json({ error: 'the vision step is not set up' });
   const image = (req.body && req.body.image) || '';
   if (!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(image) || image.length > 6e6) return res.status(400).json({ error: 'send one jpeg, png or webp under 4 MB' });
