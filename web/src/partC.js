@@ -132,7 +132,17 @@ if (KEY && !off && !navigator.webdriver && location.hostname === 'vessels.ayushc
     if (e.target.closest('#prevCity, #nextCity')) ev('shore_changed', { shore: 'arrows' });
     if (e.target.closest('.chip')) ev('ship_picked');
     if (e.target.closest('#play')) ev('journey_played');
+    if (e.target.closest('#againBtn')) ev('another_shore_clicked');
+    const z = e.target.closest('.zb, .tlzoom button'); if (z) ev('zoom_changed', { where: z.dataset.w != null ? 'map' : 'horizon' });
+    if (e.target.closest('#tlPlay')) ev('replay_toggled');
+    /* Point at a ship */
+    if (e.target.closest('#spotBtn')) ev('spot_opened');
+    if (e.target.closest('#spotCamGo')) ev('spot_started', { mode: 'camera' });
+    if (e.target.closest('#spotDemoGo')) ev('spot_started', { mode: 'demo' });
+    if (e.target.closest('#spotSnap')) ev('spot_photo_taken');
+    if (e.target.closest('#spotGo')) ev('spot_journey_opened');
   }, true);
+  /* no-event: jt tlT (date scrubbers, the play events cover them), spotX (closes Point at a ship) */
 }
 </script>
 </body>
